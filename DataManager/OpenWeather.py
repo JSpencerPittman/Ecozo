@@ -3,7 +3,7 @@ import yaml
 import requests
 import json
 import pandas as pd
-from APIException import APIException
+from DataManager.APIException import APIException
 
 class OpenWeatherAPI:
     def __init__(self, defaults=False):
@@ -82,6 +82,7 @@ class OpenWeatherAPI:
 
         # Convert into a pandas DataFrame
         weather_df = pd.DataFrame(weather_entries)
+        self._format_weather_dataframe(weather_df)
         return weather_df
 
     @staticmethod
@@ -108,4 +109,21 @@ class OpenWeatherAPI:
             for k, v in d.items():
                 result[k] = v
 
+        result['datetime'] = entry['dt']
+
         return result
+
+    @staticmethod
+    def _format_weather_dataframe(df):
+        def kelvin_to_fahrenheit(k):
+            return (k - 273.15) * (9 / 5) + 32
+
+        temp_cols = ['temp', 'feels_like', 'temp_min', 'temp_max']
+
+        for col in temp_cols:
+            df[col] = df[col].map(kelvin_to_fahrenheit)
+
+        df.reset_index(inplace=True)
+        df['hour'] = df.index.map(lambda i: 3 * (i % 8))
+        df['day'] = df.index.map(lambda i: i // 8)
+        df.drop(['index', 'datetime'], axis=1, inplace=True)
