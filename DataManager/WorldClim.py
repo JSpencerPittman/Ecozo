@@ -8,17 +8,17 @@ import io
 import rasterio
 from rasterio.transform import rowcol
 from affine import Affine
+from DataManager.APIException import APIException
 
 
-class PSM3API:
+class WorldClimAPI:
     def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data/worldclim')
         self.sql_path = os.path.join(self.par_dir, '../data/data.db')
         self.base_url = "https://biogeo.ucdavis.edu/data/worldclim/v2.1/base"
 
-        path = os.path.join(self.data_path, 'worldclim')
-        self.downloaded = os.path.exists(path)
+        self.downloaded = os.path.exists(self.data_path)
 
         self.tabelized = self._table_exists()
 
@@ -141,12 +141,10 @@ class PSM3API:
 
         return df
 
+    def _table_exists(self):
+        query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='WorldClim'"
 
-    @staticmethod
-    def _table_exists():
-        query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='psm3'"
-
-        con = sqlite3.connect("my_data.db")
+        con = sqlite3.connect(self.sql_path)
         cur = con.cursor()
         response = pd.read_sql(query, con)
         cur.close()

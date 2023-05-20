@@ -5,7 +5,7 @@ import sqlite3
 import numpy as np
 import pandas as pd
 import json
-from APIException import APIException
+from DataManager.APIException import APIException
 
 
 class PSM3API:
@@ -141,11 +141,10 @@ class PSM3API:
         else:
             raise APIException("Not enough data provided to PSM3!")
 
-    @staticmethod
-    def _table_exists():
+    def _table_exists(self):
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='psm3'"
 
-        con = sqlite3.connect("my_data.db")
+        con = sqlite3.connect(self.sql_path)
         cur = con.cursor()
         response = pd.read_sql(query, con)
         cur.close()
