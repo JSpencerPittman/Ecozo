@@ -125,21 +125,31 @@ class PSM3API:
         if not self.tabelized:
             raise APIException("PSM3 is not tabelized!")
 
+        res_df = None
+
         # Single day
         if m is not None and d is not None:
-            doy = self._date_to_doy(m,d)
-            return self._get_dataframe_for_day(doy)
+            doy = self._date_to_doy(m, d)
+            res =  self._get_dataframe_for_day(doy)
         elif t1 is not None and t2 is None:
             doy = self._date_to_doy(*t1)
-            return self._get_dataframe_for_day(doy)
+            res_df = self._get_dataframe_for_day(doy)
         # Multiple days
         elif t1 is not None and t2 is not None:
             doy1 = self._date_to_doy(*t1)
             doy2 = self._date_to_doy(*t2)
-            return self._get_dataframe_for_range(doy1, doy2)
+            res_df = self._get_dataframe_for_range(doy1, doy2)
         # Bad Input
         else:
             raise APIException("Not enough data provided to PSM3!")
+
+        self._format_psm3_dataframe(res_df)
+        return res_df
+
+    def status(self):
+        print(f"Calibration: {'Complete' if self.calibrated else 'Incomplete'}")
+        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
+        print(f"Tabelization: {'Complete' if self.tabelized else 'Incomplete'}")
 
     def _table_exists(self):
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='psm3'"
@@ -187,4 +197,41 @@ class PSM3API:
         cur.close()
         con.close()
 
-        return int(res.iloc[0,0])
+        return int(res.iloc[0, 0])
+
+    def _format_psm3_dataframe(self, df):
+        # Convert Temperatures
+        def cel2fah(c):
+            return (int(c) * (9 / 5)) + 32
+
+        df['Temperature'] = df['Temperature'].map(cel2fah)
+        df['Dew Point'] = df['Dew Point'].map(cel2fah)
+
+        # Map Meta Data to cloud types
+        meta_path = os.path.join(self.data_path, 'weather_meta.json')
+        with open(meta_path, 'r') as meta_json:
+            meta_data = json.load(meta_json)
+        cloud_mapping = {}
+        for key, value in meta_data.items():
+            if key.startswith('Cloud Type'):
+                cloud_mapping[key.split(' ')[-1]] = value
+        df['Cloud Type'] = df['Cloud Type'].map(cloud_mapping)
+
+        # Map Data Types
+        int_cols = ['Year', 'Month', 'Day', 'Hour', 'Minute', 'Clearsky DHI',
+                    'Clearsky DNI', 'Clearsky GHI', 'Dew Point', 'Pressure',
+                    'DHI', 'DNI', 'GHI']
+        float_cols = ['Solar Zenith Angle', 'Relative Humidity', 'Precipitable Water', 'Surface Albedo',
+                      'Wind Direction', 'Wind Speed', 'Global Horizontal UV Irradiance (280-400nm)',
+                      'Global Horizontal UV Irradiance (295-385nm)']
+
+        for col in int_cols:
+            df[col] = df[col].astype(int)
+
+        for col in float_cols:
+            df[col] = df[col].astype(float)
+
+        # Index the entries based on time of day
+        def daily_index(row):
+            return row.Hour * 2 + (row.Minute / 30)
+        df['daily_index'] = df.apply(daily_index, axis=1)

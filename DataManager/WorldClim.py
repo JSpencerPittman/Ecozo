@@ -139,7 +139,11 @@ class WorldClimAPI:
         cur.close()
         con.close()
 
-        return df
+        return self._format_worldclim_dataframe(df)
+
+    def status(self):
+        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
+        print(f"Tabelization: {'Complete' if self.tabelized else 'Incomplete'}")
 
     def _table_exists(self):
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='WorldClim'"
@@ -158,6 +162,39 @@ class WorldClimAPI:
 
         res = np.hstack([self.globe_rows, self.globe_cols, data])
         return pd.DataFrame(res, columns=['row', 'col', 'data'])
+
+    @staticmethod
+    def _format_worldclim_dataframe(df):
+        def cel2fah(c):
+            return (c * 9 / 5) + 32
+
+        col_time_based = set()
+        col_time_invariant = set()
+        for col in df.columns:
+            if '_' in col:
+                col_time_based.add(col.split('_')[0])
+            else:
+                col_time_invariant.add(col)
+
+        rows = []
+        for i, loc_df in df.iterrows():
+            for m in range(1, 13):
+                row = []
+                for col in col_time_invariant:
+                    row.append(loc_df[col])
+                for col in col_time_based:
+                    col = f"{col}_{m}"
+                    row.append(loc_df[col])
+                rows.append(row)
+
+        columns = list(col_time_invariant) + list(col_time_based)
+        expanded_df = pd.DataFrame(rows, columns=columns)
+
+        temp_cols = [col for col in columns if col.startswith('t')]
+        for col in temp_cols:
+            expanded_df[col] = expanded_df[col].map(cel2fah)
+
+        return expanded_df
 
     @staticmethod
     def _coordinates_to_index(lat, lon):

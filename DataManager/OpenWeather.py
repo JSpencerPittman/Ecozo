@@ -5,6 +5,7 @@ import json
 import pandas as pd
 from DataManager.APIException import APIException
 
+
 class OpenWeatherAPI:
     def __init__(self, defaults=False):
         self.par_dir = os.path.dirname(__file__)
@@ -85,6 +86,10 @@ class OpenWeatherAPI:
         self._format_weather_dataframe(weather_df)
         return weather_df
 
+    def status(self):
+        print(f"Calibration: {'Complete' if self.calibrated else 'Incomplete'}")
+        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
+
     @staticmethod
     def _format_weather_entry(entry):
         def format_weather_description(desc):
@@ -126,4 +131,7 @@ class OpenWeatherAPI:
         df.reset_index(inplace=True)
         df['hour'] = df.index.map(lambda i: 3 * (i % 8))
         df['day'] = df.index.map(lambda i: i // 8)
-        df.drop(['index', 'datetime'], axis=1, inplace=True)
+
+        df.rename(columns={'all': 'cloudiness'}, inplace=True)
+
+        df.drop(['index', 'datetime', 'temp_kf'], axis=1, inplace=True)
