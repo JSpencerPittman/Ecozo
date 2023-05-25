@@ -3,3 +3,4 @@ data
 *.db
 *.tif
 *.yaml
+.ipynb_checkpoints
