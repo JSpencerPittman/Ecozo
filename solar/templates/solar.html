@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solar</title>
+</head>
+<body>
+    <h1>Solar Panels Power Production</h1>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>
+            <h2>Location</h2>
+            <div>
+                <label>Latitude</label>
+                <input type="text" name="latitude" maxlength="200" required id="id_latitude" value="{{ location.latitude }}">
+            </div>
+            <div>
+                <label>Longitude</label>
+                <input type="text" name="longitude" maxlength="200" required id="id_longitude" value="{{ location.longitude }}">
+            </div>
+        </div>
+        <div>
+            <h2>Solar Panel</h2>
+            <div>
+                <label>Capacity</label>
+                <input type="text" name="capacity" maxlength="200" required id="id_capacity" value="{{ solar_panel.capacity }}">
+            </div>
+            <div>
+                <label>Efficiency</label>
+                <input type="text" name="efficiency" maxlength="200" required id="id_efficicency" value="{{ solar_panel.efficiency }}">
+            </div>
+             <div>
+                <label>Area</label>
+                <input type="text" name="area" maxlength="200" required id="id_area" value="{{ solar_panel.area }}">
+            </div>
+        </div>
+            <div>
+                <h2>Solar Exposure</h2>
+                 <div>
+                    <label>Intensity</label>
+                     <input type="text" name="intensity" maxlength="200" required id="id_intensity" value="{{ exposure.intensity }}">
+                </div>
+                <div>
+                    <label>Duration</label>
+                    <input type="text" name="duration" maxlength="200" required id="id_duration" value="{{ exposure.duration }}">
+                </div>
+            </div>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if pow is not None %}
+    <div>
+        <h2>Predicted Power</h2>
+        <p>{{ pow }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

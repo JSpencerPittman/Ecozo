@@ -4,3 +4,4 @@ data
 *.tif
 *.yaml
 .ipynb_checkpoints
+*.sqlite3
