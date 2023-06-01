@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
-from solar.modellinks.alpha import alpha_link
+from solar.modellinks.charlie import charlie_link
 import json
 from geopy.geocoders import Nominatim
 
@@ -28,7 +28,7 @@ def solar(request):
 
     if loc_in_session and sp_in_session:
         if not request.session['power_satisfied']:
-            request.session['power'] = alpha_link(request)
+            request.session['power'] = charlie_link(request)
             request.session['power_satisfied'] = True
 
         context['power'] = request.session['power']

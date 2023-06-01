@@ -1,8 +1,8 @@
-from SolarIrrad.models.alpha import Alpha
+from SolarIrrad.models.charlie import Charlie
 from SolarIrrad.models.model import SolarPanel
 
 
-def alpha_link(request):
+def charlie_link(request):
     latitude = request.session['location']['latitude']
     longitude = request.session['location']['longitude']
 
@@ -13,14 +13,14 @@ def alpha_link(request):
 
     solar_panel = SolarPanel(efficiency, area, pr, capacity)
 
-    wc_alpha_model = Alpha(latitude, longitude, solar_panel)
+    charlie_model = Charlie(latitude, longitude, solar_panel)
 
     results = dict(
-        hour=wc_alpha_model.hour(),
-        day=wc_alpha_model.day(),
-        five_days=wc_alpha_model.five_days(),
-        month=wc_alpha_model.month(),
-        year=wc_alpha_model.year()
+        hour=charlie_model.hour(),
+        day=charlie_model.day(),
+        five_days=charlie_model.five_days(),
+        month=charlie_model.month(),
+        year=charlie_model.year()
     )
 
     for key, val in results.items():

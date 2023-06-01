@@ -17,7 +17,6 @@ class PSM3Alpha(SolarIrradModel):
         self.ss = StandardScaler()
         self.poly_feat = PolynomialFeatures(2)
         self.psm3_api = PSM3API(defaults=True)
-        self.ow_api = OpenWeatherAPI()
 
         self.y_test = None
         self.y_train = None

@@ -8,7 +8,7 @@ AVG_DAYS_IN_MONTH = 30
 HOURS_IN_DAY = 24
 
 
-class WCAlpha(SolarIrradModel):
+class Alpha(SolarIrradModel):
     def __init__(self, lat, lon, sp: SolarPanel):
         self.lat, self.lon = lat, lon
         self.solar_panel = sp
