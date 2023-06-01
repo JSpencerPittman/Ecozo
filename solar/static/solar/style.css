@@ -122,7 +122,10 @@ body {
 
 /* Solar Panel Specific Styling */
 
-#sp-panel { background-color: #545B77; }
+#sp-panel {
+    background-color: #545B77;
+    height: 360px;
+}
 
 #sp-button {
     background: #5C8984;

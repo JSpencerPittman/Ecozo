@@ -35,11 +35,13 @@ function submitSolarPanel() {
     const area_value = document.getElementById("area-input").value;
     const efficiency_value = document.getElementById("efficiency-input").value;
     const pr_value = document.getElementById("pr-input").value;
+    const capacity_value = document.getElementById("capacity-input").value;
 
     const data = {
         area: area_value,
         efficiency: efficiency_value,
-        pr: pr_value
+        pr: pr_value,
+        capacity: capacity_value
     };
 
     const json_data = JSON.stringify(data);

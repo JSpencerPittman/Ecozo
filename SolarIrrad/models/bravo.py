@@ -1,7 +1,8 @@
 from DataManager.PSM3 import PSM3API
 from DataManager.OpenWeather import OpenWeatherAPI
-from SolarIrrad.Model import SolarIrradModel
-from SolarIrrad.DataFormatter import PSM3DataFormatter, OWDataFormatter
+from SolarIrrad.models.model import SolarIrradModel
+#from SolarIrrad.DataFormatter import PSM3DataFormatter, OWDataFormatter
+from SolarIrrad.preprocessing.bravo import DataPreprocessorPSM3, DataPreprocessorOpenWeather
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.ensemble import RandomForestRegressor
@@ -44,7 +45,7 @@ class PSM3Alpha(SolarIrradModel):
     def train(self):
         psm3_api = PSM3API(defaults=True)
         data = psm3_api.get_dataframe(t1=(1, 1), t2=(12, 31))
-        psm3_dataformatter = PSM3DataFormatter(data)
+        psm3_dataformatter = DataPreprocessorPSM3(data)
         data = psm3_dataformatter.format()
 
         # Split to input features and labels
@@ -69,7 +70,7 @@ class PSM3Alpha(SolarIrradModel):
         self.model = rf_reg
 
     def predict(self, data, lat, lon):
-        ow_dataformatter = OWDataFormatter(data, lat, lon)
+        ow_dataformatter = DataPreprocessorOpenWeather(data, lat, lon)
         data = ow_dataformatter.format()
         data = self._transform_data(data)
         self.pred = self.model.predict(data)

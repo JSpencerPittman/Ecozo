@@ -1,9 +1,9 @@
-from datetime import datetime
-import pytz
-import ephem
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from SolarIrrad.preprocessing.DataPreprocessor import DataPreprocessor
 import math
-
+from datetime import datetime
+import ephem
+import pytz
 
 WINTER_SOLSTICE_DOY = 355
 MIDNIGHT = 0
@@ -11,9 +11,9 @@ CLOUDINESS_AVG = 30
 RAD2DEG = 180 / math.pi
 
 
-class DataFormatter(ABC):
+class DataPreprocessorBravo(DataPreprocessor):
     def __init__(self, data):
-        self.data = data
+        super().__init__(data)
 
     @abstractmethod
     def format(self):
@@ -40,7 +40,7 @@ class DataFormatter(ABC):
         pass
 
 
-class PSM3DataFormatter(DataFormatter):
+class DataPreprocessorPSM3(DataPreprocessorBravo):
     def __init__(self, data):
         super().__init__(data)
 
@@ -92,7 +92,7 @@ class PSM3DataFormatter(DataFormatter):
         self.data.drop(unnecessary_columns, axis=1, inplace=True)
 
 
-class OWDataFormatter(DataFormatter):
+class DataPreprocessorOpenWeather(DataPreprocessorBravo):
     def __init__(self, data, lat, lon):
         super().__init__(data)
         self.lat = lat
