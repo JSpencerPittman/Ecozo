@@ -95,6 +95,7 @@ class OpenWeatherAPI:
         def format_weather_description(desc):
             try:
                 desc['weather'] = desc['main']
+                desc['weather_id'] = desc['id']
 
                 desc.pop('id')
                 desc.pop('icon')
@@ -134,4 +135,5 @@ class OpenWeatherAPI:
 
         df.rename(columns={'all': 'cloudiness'}, inplace=True)
 
-        df.drop(['index', 'datetime', 'temp_kf'], axis=1, inplace=True)
+        df.drop(['index', 'temp_kf'], axis=1, inplace=True)
+
