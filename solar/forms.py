@@ -1,16 +1,8 @@
 from django import forms
 
 
-class SolarForm(forms.Form):
-    # Location Data
-    latitude = forms.FloatField()
-    longitude = forms.FloatField()
-
+class SolarPanelForm(forms.Form):
     # Solar Panel Specs
-    capacity = forms.FloatField()
     efficiency = forms.FloatField()
     area = forms.FloatField()
-
-    # Solar Irradiation Exposure
-    intensity = forms.FloatField()
-    duration = forms.FloatField()
+    performance_ratio = forms.FloatField()
