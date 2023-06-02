@@ -13,14 +13,14 @@ def alpha_link(request):
 
     solar_panel = SolarPanel(efficiency, area, pr, capacity)
 
-    wc_alpha_model = Alpha(latitude, longitude, solar_panel)
+    alpha_model = Alpha(latitude, longitude, solar_panel)
 
     results = dict(
-        hour=wc_alpha_model.hour(),
-        day=wc_alpha_model.day(),
-        five_days=wc_alpha_model.five_days(),
-        month=wc_alpha_model.month(),
-        year=wc_alpha_model.year()
+        hour=alpha_model.hour(),
+        day=alpha_model.day(),
+        five_days=alpha_model.five_days(),
+        month=alpha_model.month(),
+        year=alpha_model.year()
     )
 
     for key, val in results.items():

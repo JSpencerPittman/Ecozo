@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from solar.modellinks.charlie import charlie_link
+from solar.modellinks.bravo import bravo_link
 import json
 from geopy.geocoders import Nominatim
 
@@ -28,7 +29,18 @@ def solar(request):
 
     if loc_in_session and sp_in_session:
         if not request.session['power_satisfied']:
-            request.session['power'] = charlie_link(request)
+            charlie_results = charlie_link(request)
+            bravo_results = bravo_link(request)
+
+            results = dict(
+                hour=bravo_results['hour'],
+                day=bravo_results['day'],
+                five_days=bravo_results['five_days'],
+                month=charlie_results['month'],
+                year=charlie_results['year']
+            )
+
+            request.session['power'] = results
             request.session['power_satisfied'] = True
 
         context['power'] = request.session['power']
