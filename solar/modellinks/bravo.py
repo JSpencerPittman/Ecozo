@@ -2,6 +2,7 @@ from SolarIrrad.models.bravo import Bravo
 from SolarIrrad.models.model import SolarPanel
 from DataManager.OpenWeather import OpenWeatherAPI
 
+
 def bravo_link(request):
     latitude = request.session['location']['latitude']
     longitude = request.session['location']['longitude']
@@ -13,7 +14,10 @@ def bravo_link(request):
 
     solar_panel = SolarPanel(efficiency, area, pr, capacity)
 
-    ow_api = OpenWeatherAPI(defaults=True)
+    ow_api = OpenWeatherAPI()
+
+    ow_api.calibrate(latitude, longitude)
+    ow_api.download()
     ow_df = ow_api.get_dataframe()
 
     bravo_model = Bravo(solar_panel)

@@ -82,7 +82,7 @@ class PSM3API:
             raise APIException("PSM3 is not downloaded!")
 
         psm3_path = os.path.join(self.data_path, 'psm3_data.csv')
-        psm3_data = pd.read_csv(psm3_path)
+        psm3_data = pd.read_csv(psm3_path, low_memory=False)
 
         # Handle Header Data
         meta_data = dict(zip(psm3_data.columns, list(psm3_data.iloc[0])))

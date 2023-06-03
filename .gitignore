@@ -1,5 +1,6 @@
 .idea
 data
+*.pkl
 *.db
 *.tif
 *.yaml

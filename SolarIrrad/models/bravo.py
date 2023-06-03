@@ -21,7 +21,7 @@ class Bravo(SolarIrradModel):
         self.psm3_api = PSM3API(defaults=True)
         self.solar_panel = sp
 
-        self.pkl_path = os.path.join(os.path.dirname(__file__), 'saved/bravo.pkl')
+        self.pkl_path = os.path.join(os.path.dirname(__file__), 'saved/delta.pkl')
 
         self.y_test = None
         self.y_train = None
