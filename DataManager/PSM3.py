@@ -130,7 +130,7 @@ class PSM3API:
         # Single day
         if m is not None and d is not None:
             doy = self._date_to_doy(m, d)
-            res =  self._get_dataframe_for_day(doy)
+            res_df = self._get_dataframe_for_day(doy)
         elif t1 is not None and t2 is None:
             doy = self._date_to_doy(*t1)
             res_df = self._get_dataframe_for_day(doy)
