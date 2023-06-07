@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from solar.views import solar, solar_geo, solar_panel
+from wind.views import wind
 
 urlpatterns = [
     path('solar/', solar, name='Solar'),
     path('solar/geo', solar_geo, name='SolarGeo'),
-    path('solar/solar-panel', solar_panel, name="SolarPanel")
+    path('solar/solar-panel', solar_panel, name="SolarPanel"),
+    path('wind/', wind, name='Wind')
 ]

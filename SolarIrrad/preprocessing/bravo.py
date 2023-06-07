@@ -183,13 +183,13 @@ class DataPreprocessorOpenWeather(DataPreprocessorBravo):
             'temp': 'Temperature',
             'pressure': 'Pressure',
             'humidity': 'Relative Humidity',
-            'speed': 'Wind Speed',
-            'deg': 'Wind Direction',
+            'speed': 'WindPower Speed',
+            'deg': 'WindPower Direction',
         }
         self.data.rename(columns=column_names, inplace=True)
 
         # Match Column Ordering
         ordering = ['Temperature', 'Relative Humidity', 'Solar Zenith Angle', 'Pressure',
-                    'Wind Direction', 'Wind Speed', 'wint_sol', 'midnight',
+                    'WindPower Direction', 'WindPower Speed', 'wint_sol', 'midnight',
                     'blockage', 'cloudiness']
         self.data = self.data[ordering]

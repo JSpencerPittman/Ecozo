@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/wind/style.css">
+    </head>
+    <body>
+        {% csrf_token %}
+        <script src="../static/wind/script.js"></script>
+
+        <!-- Header -->
+        <div id="hd-panel">
+            <div class="horiz-spread" id="hd-cont">
+                <div id="hd-brand">
+                    <p>Ecozo</p>
+                </div>
+                <div id="hd-title">
+                    <p>Wind Turbine Generation</p>
+                </div>
+                <button class="button" id="hd-button">Back</button>
+            </div>
+        </div>
+
+
+        <!-- Location Panel -->
+        <div class="body-panel" id="lc-panel">
+            <div class="center-content left-cont" id="lc-left-cont">
+                <button onclick="getLocation()" class="button body-button" id="lc-button">Get Location</button>
+            </div>
+            <div class="right-cont" id="lc-right-cont">
+                <div class="lc-content vert-spread" id="lc-labels">
+                    <p>Coordinates</p>
+                    <p>City</p>
+                    <p>Country</p>
+                </div>
+                <div class="lc-content vert-spread" id="lc-values">
+                    <p>({{ location.latitude }}, {{ location.longitude }})</p>
+                    <p>{{ location.city }}</p>
+                    <p>{{ location.country }}</p>
+                </div>
+            </div>
+            <div class="panel-label" id="lc-label">
+                <p class="panel-label-text">Location</p>
+            </div>
+        </div>
+        
+        <div class="body-panel" id="sp-panel">
+                <div class="center-content left-cont" id="sp-left-cont">
+                    <button class="button body-button" id="sp-button" onclick="submitSolarPanel()">How much power?</button>
+                </div>
+                <div class="right-cont" id="sp-right-cont">
+                    <div class="vert-spread" id="sp-form">
+                        <div class="center-content sp-textedit-cont">
+                            <p class="sp-textedit-label">Efficiency:</p>
+                            <input type="text" class="sp-textedit" id="area-input" value="{{ solar_panel.area }}">
+                        </div>
+                        <div class="center-content sp-textedit-cont">
+                            <p class="sp-textedit-label">Blade Radius:</p>
+                            <input type="text" class="sp-textedit" id="efficiency-input" value="{{ solar_panel.efficiency }}">
+                        </div>
+                        <div class="center-content sp-textedit-cont">
+                            <p class="sp-textedit-label">Hub Height:</p>
+                            <input type="text" class="sp-textedit" id="pr-input" value="{{ solar_panel.pr }}">
+                        </div>
+                    </div>
+                </div>
+            <div class="panel-label" id="sp-label">
+                <p class="panel-label-text">Wind Turbine</p>
+            </div>
+        </div>
+        
+        <div class="body-panel" id="pw-panel">
+            <div id="pw-main-cont">
+                <div class="horiz-spread" id="pw-results">
+                    <div class="vert-spread pw-res-item">
+                        <p class="pw-res-item-text">Hour</p>
+                        <p class="pw-res-item-text">{{ power.hour }}</p>
+                    </div>
+                    <div class="vert-spread pw-res-item">
+                        <p class="pw-res-item-text">Day</p>
+                        <p class="pw-res-item-text">{{ power.day }}</p>
+                    </div>
+                    <div class="vert-spread pw-res-item">
+                        <p class="pw-res-item-text">5 Days</p>
+                        <p class="pw-res-item-text">{{ power.five_days }}</p>
+                    </div>
+                    <div class="vert-spread pw-res-item">
+                        <p class="pw-res-item-text">Month</p>
+                        <p class="pw-res-item-text">{{ power.month }}</p>
+                    </div>
+                    <div class="vert-spread pw-res-item">
+                        <p class="pw-res-item-text">Year</p>
+                        <p class="pw-res-item-text">{{ power.year }}</p>
+                    </div>
+                </div>
+                <div id="pw-units">
+                    All units in kilowatt-hours (kWh)
+                </div>
+            </div>
+
+            <div class="panel-label" id="pw-label">
+                <p class="panel-label-text">Power Generated</p>
+            </div>
+        </div>
+
+        <div class="center-content" id="ft-panel">
+            <p id="footer-text">Created by Jason Pittman</p>
+        </div>
+
+    </body>
+</html>
