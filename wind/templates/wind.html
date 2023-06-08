@@ -45,21 +45,21 @@
         
         <div class="body-panel" id="sp-panel">
                 <div class="center-content left-cont" id="sp-left-cont">
-                    <button class="button body-button" id="sp-button" onclick="submitSolarPanel()">How much power?</button>
+                    <button class="button body-button" id="sp-button" onclick="submitWindTurbine()">How much power?</button>
                 </div>
                 <div class="right-cont" id="sp-right-cont">
                     <div class="vert-spread" id="sp-form">
                         <div class="center-content sp-textedit-cont">
                             <p class="sp-textedit-label">Efficiency:</p>
-                            <input type="text" class="sp-textedit" id="area-input" value="{{ solar_panel.area }}">
+                            <input type="text" class="sp-textedit" id="efficiency-input" value="{{ wind_turbine.efficiency }}">
                         </div>
                         <div class="center-content sp-textedit-cont">
                             <p class="sp-textedit-label">Blade Radius:</p>
-                            <input type="text" class="sp-textedit" id="efficiency-input" value="{{ solar_panel.efficiency }}">
+                            <input type="text" class="sp-textedit" id="radius-input" value="{{ wind_turbine.radius }}">
                         </div>
                         <div class="center-content sp-textedit-cont">
                             <p class="sp-textedit-label">Hub Height:</p>
-                            <input type="text" class="sp-textedit" id="pr-input" value="{{ solar_panel.pr }}">
+                            <input type="text" class="sp-textedit" id="height-input" value="{{ wind_turbine.height }}">
                         </div>
                     </div>
                 </div>
@@ -73,23 +73,23 @@
                 <div class="horiz-spread" id="pw-results">
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">Hour</p>
-                        <p class="pw-res-item-text">{{ power.hour }}</p>
+                        <p class="pw-res-item-text">{{ wind_power.hour }}</p>
                     </div>
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">Day</p>
-                        <p class="pw-res-item-text">{{ power.day }}</p>
+                        <p class="pw-res-item-text">{{ wind_power.day }}</p>
                     </div>
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">5 Days</p>
-                        <p class="pw-res-item-text">{{ power.five_days }}</p>
+                        <p class="pw-res-item-text">{{ wind_power.five_days }}</p>
                     </div>
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">Month</p>
-                        <p class="pw-res-item-text">{{ power.month }}</p>
+                        <p class="pw-res-item-text">{{ wind_power.month }}</p>
                     </div>
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">Year</p>
-                        <p class="pw-res-item-text">{{ power.year }}</p>
+                        <p class="pw-res-item-text">{{ wind_power.year }}</p>
                     </div>
                 </div>
                 <div id="pw-units">

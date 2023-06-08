@@ -20,7 +20,7 @@ class Aeolus(object):
         self.api.download()
         self.api.tabelize()
 
-        data = self.api.get_dataframe(t1=(1,1), t2=(12,31))
+        data = self.api.get_dataframe(t1=(1,1), t2=(12, 31))
         self.atm_data = AtmosphericData()
         self.atm_data.add_windtk_data(data)
 
@@ -47,7 +47,9 @@ class Aeolus(object):
         total_power = 0
 
         for d in range(days):
-            doy = (doy_init + d) % (DAYS_IN_YEAR+1)
+            doy = doy_init + d
+            if doy > 365:
+                doy -= 365
             total_power += self.pow_eval.eval(doy)
 
         return total_power

@@ -222,7 +222,7 @@ class PSM3API:
                     'Clearsky DNI', 'Clearsky GHI', 'Dew Point', 'Pressure',
                     'DHI', 'DNI', 'GHI']
         float_cols = ['Solar Zenith Angle', 'Relative Humidity', 'Precipitable Water', 'Surface Albedo',
-                      'WindPower Direction', 'WindPower Speed', 'Global Horizontal UV Irradiance (280-400nm)',
+                      'Wind Direction', 'Wind Speed', 'Global Horizontal UV Irradiance (280-400nm)',
                       'Global Horizontal UV Irradiance (295-385nm)']
 
         for col in int_cols:

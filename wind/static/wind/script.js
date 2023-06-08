@@ -17,7 +17,7 @@ function submitPosition(position) {
     };
     let json_data = JSON.stringify(data);
 
-    const url = "/solar/geo"
+    const url = "/wind/geo"
     fetch(url, {
         method: 'POST',
         headers: {
@@ -31,21 +31,19 @@ function submitPosition(position) {
     });
 }
 
-function submitSolarPanel() {
-    const area_value = document.getElementById("area-input").value;
+function submitWindTurbine() {
     const efficiency_value = document.getElementById("efficiency-input").value;
-    const pr_value = document.getElementById("pr-input").value;
-    const capacity_value = document.getElementById("capacity-input").value;
+    const radius_value = document.getElementById("radius-input").value;
+    const height_value = document.getElementById("height-input").value;
 
     const data = {
-        area: area_value,
         efficiency: efficiency_value,
-        pr: pr_value,
-        capacity: capacity_value
+        radius: radius_value,
+        height: height_value
     };
 
     const json_data = JSON.stringify(data);
-    const url = "/solar/solar-panel";
+    const url = "/wind/wind-turbine";
 
     fetch(url, {
         method: 'POST',
