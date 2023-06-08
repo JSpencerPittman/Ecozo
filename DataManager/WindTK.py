@@ -25,7 +25,7 @@ class WindTKAPI:
         keys_path = os.path.join(self.par_dir, 'keys.yaml')
         with open(keys_path, 'r') as keys_yaml:
             keys = yaml.safe_load(keys_yaml)
-        self.api_key = keys["PSM3_API_KEY"]
+        self.api_key = keys["NREL_API_KEY"]
         self.email = keys["EMAIL"]
 
         self.latitude = None

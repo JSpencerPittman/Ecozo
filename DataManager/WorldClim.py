@@ -123,7 +123,6 @@ class WorldClimAPI:
         loc_row, loc_col = self._coordinates_to_index(lat, lon)
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
 
         search_query = f"SELECT * FROM WorldClim"
 
@@ -136,7 +135,6 @@ class WorldClimAPI:
 
         df = pd.read_sql(search_query, con)
 
-        cur.close()
         con.close()
 
         return self._format_worldclim_dataframe(df)
@@ -149,9 +147,7 @@ class WorldClimAPI:
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='WorldClim'"
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
         response = pd.read_sql(query, con)
-        cur.close()
         con.close()
 
         return bool(response.iloc[0,0])

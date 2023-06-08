@@ -7,11 +7,12 @@ from DataManager.APIException import APIException
 
 
 class OpenWeatherAPI:
-    def __init__(self, defaults=False):
+    def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data')
         self.base_url = "http://api.openweathermap.org/data/2.5/forecast"
-        self.calibrated = defaults
+
+        self.calibrated = False
 
         path = os.path.join(self.data_path, 'weather.json')
         self.downloaded = os.path.exists(path)
@@ -22,14 +23,7 @@ class OpenWeatherAPI:
             keys = yaml.safe_load(keys_yaml)
         self.api_key = keys["OPEN_WEATHER_API_KEY"]
 
-        if defaults:
-            defaults_path = os.path.join(self.par_dir, 'defaults.yaml')
-            with open(defaults_path, 'r') as defaults_yaml:
-                defaults = yaml.safe_load(defaults_yaml)
-            self.latitude = defaults['latitude']
-            self.longitude = defaults['longitude']
-        else:
-            self.latitude, self.longitude = None, None
+        self.latitude, self.longitude = None, None
 
     def calibrate(self, lat, lon):
         self.latitude = lat

@@ -9,12 +9,12 @@ from DataManager.APIException import APIException
 
 
 class PSM3API:
-    def __init__(self, defaults=False):
+    def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data')
         self.sql_path = os.path.join(self.data_path, 'data.db')
         self.base_url = "https://developer.nrel.gov/api/nsrdb/v2/solar/psm3-download.csv"
-        self.calibrated = defaults
+        self.calibrated = False
 
         path = os.path.join(self.data_path, 'psm3_data.csv')
         self.downloaded = os.path.exists(path)
@@ -25,18 +25,10 @@ class PSM3API:
         keys_path = os.path.join(self.par_dir, 'keys.yaml')
         with open(keys_path, 'r') as keys_yaml:
             keys = yaml.safe_load(keys_yaml)
-        self.api_key = keys["PSM3_API_KEY"]
+        self.api_key = keys["NREL_API_KEY"]
         self.email = keys["EMAIL"]
 
-        if defaults:
-            defaults_path = os.path.join(self.par_dir, 'defaults.yaml')
-            with open(defaults_path, 'r') as defaults_yaml:
-                defaults = yaml.safe_load(defaults_yaml)
-            self.latitude = defaults['latitude']
-            self.longitude = defaults['longitude']
-            self.year = defaults['year']
-        else:
-            self.latitude, self.longitude, self.year = None, None, None
+        self.latitude, self.longitude, self.year = None, None, None
 
     def calibrate(self, lat, lon, year):
         self.latitude = lat
@@ -155,9 +147,7 @@ class PSM3API:
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='psm3'"
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
         response = pd.read_sql(query, con)
-        cur.close()
         con.close()
 
         return bool(response.iloc[0, 0])
@@ -166,11 +156,7 @@ class PSM3API:
         search_query = f"SELECT * FROM psm3 WHERE day_of_year >= {doy1} AND day_of_year <= {doy2}"
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
-
         df = pd.read_sql(search_query, con)
-
-        cur.close()
         con.close()
 
         return df
@@ -179,11 +165,7 @@ class PSM3API:
         search_query = f"SELECT * FROM psm3 WHERE day_of_year = {doy}"
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
-
         df = pd.read_sql(search_query, con)
-
-        cur.close()
         con.close()
 
         return df
@@ -192,9 +174,7 @@ class PSM3API:
         search_query = f"SELECT DISTINCT day_of_year FROM psm3 WHERE Month = {month} AND DAY = {day};"
 
         con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
         res = pd.read_sql(search_query, con)
-        cur.close()
         con.close()
 
         return int(res.iloc[0, 0])

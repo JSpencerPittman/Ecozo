@@ -28,7 +28,7 @@ def solar(request):
         context['solar_panel'] = request.session['solar_panel']
 
     if loc_in_session and sp_in_session:
-        if not request.session['power_satisfied']:
+        if not request.session['solar_power_satisfied']:
             charlie_results = charlie_link(request)
             delta_results = delta_link(request)
 
@@ -40,19 +40,18 @@ def solar(request):
                 year=charlie_results['year']
             )
 
-            request.session['power'] = results
-            request.session['power_satisfied'] = True
+            request.session['solar_power'] = results
+            request.session['solar_power_satisfied'] = True
 
-        context['power'] = request.session['power']
+        context['solar_power'] = request.session['solar_power']
 
     else:
-        context['power'] = {
+        context['solar_power'] = {
             'hour': '---',
             'day': '---',
             'five_days': '---',
             'month': '---',
             'year': '---',
-            'satisfied': 0
         }
 
     return render(request, 'solar.html', context)
@@ -97,6 +96,6 @@ def solar_panel(request):
 
     request.session['solar_panel'] = data
 
-    request.session['power_satisfied'] = False
+    request.session['solar_power_satisfied'] = False
 
     return redirect('/solar')
