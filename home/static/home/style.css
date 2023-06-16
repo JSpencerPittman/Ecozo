@@ -1,0 +1,53 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap'); /*USAGE: font-family: 'Julius Sans One', sans-serif;*/
+
+body {
+    /* Remove Outermost Padding*/
+    margin: 0;
+    padding: 0;
+
+    /* Webpage font */
+    font-family: 'Julius Sans One', sans-serif;
+    color: black;
+
+    display: flex;
+}
+
+button {
+    font-family: 'Julius Sans One', sans-serif;
+    border: none;
+    font-size: 75px;
+    background-color: white;
+}
+
+#body-container {
+    width: 100%;
+    height: 100vh;
+}
+
+.row {
+    height: 50%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.panel {
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.panel-interior {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel-text {
+    text-align: center;
+    font-size: 75px;
+}

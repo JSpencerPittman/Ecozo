@@ -1,5 +1,8 @@
 let csrftoken = '{{ csrf_token }}';
 
+const back_button = document.getElementById("hd-button");
+back_button.onclick = function () { location.href = '/' }
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(submitPosition);

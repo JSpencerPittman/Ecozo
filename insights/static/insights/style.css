@@ -1,0 +1,175 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap'); /*USAGE: font-family: 'Julius Sans One', sans-serif;*/
+
+body {
+    /* Remove Outermost Padding*/
+    margin: 0;
+    padding: 0;
+
+    /* Webpage font */
+    font-family: 'Julius Sans One', sans-serif;
+    color: black;
+
+    display: flex;
+    background-color: #374259;
+
+    overflow: hidden;
+}
+
+p { margin: 0; }
+
+button {
+    font-family: 'Julius Sans One', sans-serif;
+    border: none;
+}
+
+#body-container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+.panel {
+    width: 48%;
+    height: 100%;
+}
+
+/* Panel Header */
+
+.panel-header {
+    height: 15%;
+    background-color: #5C8984;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel-header > button {
+    font-size: 50px;
+    background-color: #5C8984;
+}
+
+
+/* Intro panel */
+
+.intro-panel {
+    background-color: #5C8984;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-panel > button {
+    font-size: 100px;
+    background-color: #5C8984;
+}
+
+/* Selection Panel */
+
+.select-panel { display: none; }
+
+.directory {
+    height: 85%;
+}
+
+.directory-item {
+    background-color: #F2D8D8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.datasets-item {
+    height: 25%;
+}
+
+.models-item {
+    height: 33%;
+}
+
+.models-item:last-of-type {
+    height: 34%;
+}
+
+.directory-item > button {
+    font-size: 35px;
+    background-color: #F2D8D8;;
+}
+
+/* info panel */
+
+.info-panel {
+    background-color: #F2D8D8;
+    display: none;
+}
+
+.info-header {
+    height: 10%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.info-header > p {
+    font-size: 30px;
+    background-color:  #5C8984;
+    color: white;
+    width: 100%;
+    padding: 10px 30px 10px 30px;
+}
+
+.info-content {
+    height: 55%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    padding: 0% 10% 5% 10%;
+}
+
+.info-content > p {
+    font-size: 20px;
+    background-color: #5C8984;
+    color: white;
+    height: 100%;
+    padding: 30px;
+    width: 100%;
+}
+
+.info-button-container {
+    height: 20%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.info-button {
+    background-color: #5C8984;
+    padding: 30px;
+    margin: 10%;
+}
+
+.info-button > button { 
+    font-size: 40px;
+    color: white;
+    background-color: #5C8984;
+}
+
+/* Back Button */
+
+#back-button {
+    width: 4%;
+    height: 100%;
+    background-color: #545B77;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#back-button > button {
+    writing-mode: vertical-rl;
+    font-size: 40px;
+    background-color: #545B77;
+}

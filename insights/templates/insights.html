@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/insights/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.1/dist/gsap.min.js"></script>
+    </head>
+    <body>
+        <div id="body-container">
+
+            <div class="panel intro-panel" id="datasets-intro-panel">
+                <button onclick="introClicked('datasets')">Datasets</button>
+            </div>
+
+            <div class="panel select-panel" id="datasets-select-panel">
+                <div class="panel-header">
+                    <button onclick="panelHeaderClicked('datasets')">Datasets</button>
+                </div>
+
+                <div class="directory">
+                    
+                    <div class="directory-item datasets-item">
+                        <button onclick="datasetItemSelect('openweather')">OpenWeather</button>
+                    </div>
+                    <div class="directory-item datasets-item">
+                        <button onclick="datasetItemSelect('psm3')">PSM3</button>
+                    </div>
+                    <div class="directory-item datasets-item">
+                        <button onclick="datasetItemSelect('worldclim')">WorldClim</button>
+                    </div>
+                    <div class="directory-item datasets-item">
+                        <button onclick="datasetItemSelect('windtk')">WindTK</button>
+                    </div>
+
+                </div>
+            </div>
+               
+            <div class="panel info-panel" id="models-info-panel">
+                <div class="panel-header">
+                    <button onclick="panelHeaderClicked('datasets')">Datasets</button>
+                </div>
+
+                <div class="info-header">
+                        <p>Model</p>
+                </div>
+                
+                <div class="info-content">
+                    <p>
+                        Please select a model
+                    </p>
+                </div>
+
+                <div class="info-button-container">
+                    <div class="info-button">
+                        <button>Continue</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="panel intro-panel" id="models-intro-panel">
+                <button onclick="introClicked('models')">Models</button>
+            </div>
+
+            <div class="panel select-panel" id="models-select-panel">
+                <div class="panel-header">
+                    <button onclick="panelHeaderClicked('models')">Models</button>
+                </div>
+
+                <div class="directory">
+                    
+                    <div class="directory-item models-item">
+                        <button onclick="modelItemSelect('charlie')">Charlie</button>
+                    </div>
+                    <div class="directory-item models-item">
+                        <button onclick="modelItemSelect('delta')">Delta</button>
+                    </div>
+                    <div class="directory-item models-item">
+                        <button onclick="modelItemSelect('aeolus')">Aeolus</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel info-panel" id="datasets-info-panel">
+                <div class="panel-header">
+                    <button onclick="panelHeaderClicked('models')">Models</button>
+                </div>
+
+                <div class="info-header">
+                        <p>Dataset</p>
+                </div>
+                
+                <div class="info-content">
+                    <p>
+                        Please select a dataset
+                    </p>
+                </div>
+
+                <div class="info-button-container">
+                    <div class="info-button">
+                        <button>Continue</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id="back-button">
+                <button>Back</button>
+            </div>
+
+        </div> 
+
+        <script src="../static/insights/script.js"></script>
+    </body>
+</html>
