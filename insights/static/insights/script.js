@@ -27,7 +27,7 @@ let md_inf = '#models-info-panel';
 function panel_header(side) {
     let inactiveColor = '#395754';
 
-    if(side == 'models') {
+    if(side === 'models') {
         md_info_header = md_info_panel.querySelector('.panel-header');
         md_info_header.style.backgroundColor = inactiveColor;
 
@@ -43,7 +43,7 @@ function panel_header(side) {
 }
 
 function hide_panels(tm, side) {
-    if(side == 'models') {
+    if(side === 'models') {
         // Selection Panel
         tm.to(ds_sel, {x:'+=50%'}, 0);
         tm.to(ds_sel, {y:'+=100%'}, 0.5);
@@ -149,9 +149,12 @@ function modelItemSelect(item) {
 
     const header = md_info_panel.querySelector('.info-header > p');
     const content = md_info_panel.querySelector('.info-content > p');
+    const cont_bttn = md_info_panel.querySelector('.info-button > button');
 
     header.textContent = dataset.name;
     content.textContent = dataset.description;
+
+    cont_bttn.onclick = function () { location.href = dataset.link; }
 }
 
 const back_button = document.getElementById('back-button').querySelector('button');

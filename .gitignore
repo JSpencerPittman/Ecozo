@@ -7,3 +7,4 @@ data
 .ipynb_checkpoints
 *.sqlite3
 webdev
+.DS_Store
