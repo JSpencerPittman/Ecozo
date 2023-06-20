@@ -79,6 +79,10 @@ button {
     align-items: center;
 }
 
+.directory-item:hover {
+    opacity: 75%;
+}
+
 .datasets-item {
     height: 25%;
 }
