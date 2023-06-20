@@ -1,161 +1,188 @@
-const ds_intro_panel = document.getElementById("datasets-intro-panel");
-const ds_select_panel = document.getElementById("datasets-select-panel");
-const ds_info_panel = document.getElementById("datasets-info-panel");
+// Objects from the HTML DOM
+const dsInfoPanel = document.getElementById("datasets-info-panel");
+const mdInfoPanel = document.getElementById("models-info-panel");
+const backButton = document.getElementById('back-button').querySelector('button');
 
-const md_intro_panel = document.getElementById("models-intro-panel");
-const md_select_panel = document.getElementById("models-select-panel");
-const md_info_panel = document.getElementById("models-info-panel");
+// ID's for the different panels
+const dsIntId = '#datasets-intro-panel';
+const dsSelId = '#datasets-select-panel';
+const dsInfId = '#datasets-info-panel';
 
+const mdIntId = '#models-intro-panel';
+const mdSelId = '#models-select-panel';
+const mdInfId = '#models-info-panel';
+
+const backButtonId = '#back-button';
+
+// JSON data with links and descriptions
 let data;
 fetch('../static/insights/data.json')
     .then((response) => response.json())
     .then((json) => data = json);
 
-function toggle_back_button(timeline, t_hide, t_show) {
-    timeline.to('#back-button', {x:'100%', opacity:'0'}, t_hide);
-    timeline.to('#back-button', {x:'0', opacity: '100%'}, t_show);
+// Colors
+const inactiveColor = '#395754';
+
+/* --- Animation Code --- */
+
+// Hides the button temporarily while the animations are taking place
+function toggleBackButton(timeline, t_hide, t_show) {
+    timeline.to(backButtonId, {x:'100%', opacity:'0'}, t_hide);
+    timeline.to(backButtonId, {x:'0', opacity: '100%'}, t_show);
 }
 
-let ds_int = '#datasets-intro-panel';
-let ds_sel = '#datasets-select-panel';
-let ds_inf = '#datasets-info-panel';
-
-let md_int = '#models-intro-panel';
-let md_sel = '#models-select-panel';
-let md_inf = '#models-info-panel';
-
-function panel_header(side) {
-    let inactiveColor = '#395754';
-
-    if(side === 'models') {
-        md_info_header = md_info_panel.querySelector('.panel-header');
-        md_info_header.style.backgroundColor = inactiveColor;
-
-        md_info_header_button = md_info_header.querySelector('button');
-        md_info_header_button.style.backgroundColor = inactiveColor;
-    } else {
-        ds_info_header = ds_info_panel.querySelector('.panel-header');
-        ds_info_header.style.backgroundColor = inactiveColor;
-
-        ds_info_header_button = ds_info_header.querySelector('button');
-        ds_info_header_button.style.backgroundColor = inactiveColor;
-    }
-}
-
-function hide_panels(tm, side) {
-    if(side === 'models') {
-        // Selection Panel
-        tm.to(ds_sel, {x:'+=50%'}, 0);
-        tm.to(ds_sel, {y:'+=100%'}, 0.5);
-
-        tm.set(ds_sel, {x: '-=50%'}, 1);
-        tm.set(ds_sel, {y: '-=100%'}, 1);
-        tm.set(ds_sel, {display: 'none'}, 1);
-
-        // Info Panel
-        tm.to(ds_inf, {x:'-=50%'}, 0);
-        tm.to(ds_inf, {y:'+=100%'}, 0.5);
-
-        tm.set(ds_inf, {x: '+=50%'}, 1);
-        tm.set(ds_inf, {y: '-=100%'}, 1);
-        tm.set(ds_inf, {display: 'none'}, 1);
-    } else {
-        // Selection Panel
-        tm.to(md_sel, {x:'-=50%'}, 0);
-        tm.to(md_sel, {y:'+=100%'}, 0.5);
-
-        tm.set(md_sel, {x: '+=50%'}, 1);
-        tm.set(md_sel, {y: '-=100%'}, 1);
-        tm.set(md_sel, {display: 'none'}, 1);
-
-        // Info Panel
-        tm.to(md_inf, {x:'+=50%'}, 0);
-        tm.to(md_inf, {y:'+=100%'}, 0.5);
-
-        tm.set(md_inf, {x: '-=50%'}, 1);
-        tm.set(md_inf, {y: '-=100%'}, 1);
-        tm.set(md_inf, {display: 'none'}, 1);
-    }
-}
-
-function show_panels(tm, side) {
-    if(side == 'models') {
-        tm.set(md_sel, {display:'block'}, 1.5);
-        tm.from(md_sel, {x:'-=200%'}, 1.5);
-
-        tm.set(md_inf, {display:'block'}, 1.5);
-        tm.from(md_inf, {x:'+=200%'}, 1.5);
-    } else {
-        tm.set(ds_sel, {display:'block'}, 1.5);
-        tm.from(ds_sel, {x:'+=200%'}, 1.5);
-
-        tm.set(ds_inf, {display:'block'}, 1.5);
-        tm.from(ds_inf, {x:'-=200%'}, 1.5);
-    }
-}
-
+/* --- Intro Handling --- */
 
 function introClicked(side) {
     let tm = gsap.timeline();
 
-    panel_header(side);
-    toggle_back_button(tm, 0, 2);
+    dimInfoPanelHeader(side);
+    toggleBackButton(tm, 0, 2);
 
     // Hide main panels
-    tm.to(ds_int, {x:'-=100%'}, 0);
-    tm.to(md_int, {x:'+=110%'}, 0);
+    tm.to(dsIntId, {x:'-=100%'}, 0);
+    tm.to(mdIntId, {x:'+=110%'}, 0);
     tm.set('.intro-panel', {display:'none'}, 1);
 
-    if(side == "datasets") {
-        tm.set(ds_sel, {display:'block'}, 1);
-        tm.from(ds_sel, {y: "-100%"}, 1);
+    let selPanel = (side === 'models' ? mdSelId : dsSelId);
+    let infPanel = (side === 'models' ? mdInfId : dsInfId);
 
-        tm.set(ds_inf, {display:'block'}, 1);
-        tm.from(ds_inf, {y: "100%"}, 1);
-    } else {
-        tm.set(md_sel, {display:'block'}, 1);
-        tm.from(md_sel, {y: "-100%"}, 1);
+    // Make panels visible
+    tm.set(selPanel, {display:'block'}, 1);
+    tm.set(infPanel, {display:'block'}, 1);
 
-        tm.set(md_inf, {display:'block'}, 1);
-        tm.from(md_inf, {y: "100%"}, 1);
-    }
+    // Move into display from a vertical direction
+    tm.from(selPanel, {y:'-100%'}, 1);
+    tm.from(infPanel, {y:'100%'}, 1);
 
     tm.play()
 }
 
+/* --- Panel Switching --- */
+// Set the panel header above the info panel to a dimmer shade to
+//  indicate it isn't selected
+function dimInfoPanelHeader(side) {
+    const infoPanel = (side === 'models' ? mdInfoPanel : dsInfoPanel);
+    const infoHeader = infoPanel.querySelector('.panel-header');
+    const infoHeaderButton = infoHeader.querySelector('button');
+
+    infoHeader.style.backgroundColor = inactiveColor;
+    infoHeaderButton.style.backgroundColor = inactiveColor;
+}
+
+// Animation routine:
+// 1) Move the panels into middle overlapping
+// 2) Move both panels out of frame
+// 3) Set their display to none
+function hidePanels(tm, side) {
+    let selPanel;
+    let infPanel;
+    let selX;
+    let infX;
+
+    if(side === 'models') {
+        selPanel = dsSelId;
+        infPanel = dsInfId;
+        selX = '+=50%';
+        infX = '-=50%';
+    } else {
+        selPanel = mdSelId;
+        infPanel = mdInfId;
+        selX = '-=50%';
+        infX = '+=50%';
+    }
+
+    // Move in to the middle
+    tm.to(selPanel, {x:selX}, 0);
+    tm.to(infPanel, {x:infX}, 0);
+
+    // Move downwards
+    tm.to(selPanel, {y:'+=100%'}, 0.5);
+    tm.to(infPanel, {y:'+=100%'}, 0.5);
+
+    // Move back to original positions and hide
+    tm.set(selPanel, {x: infX}, 1);
+    tm.set(infPanel, {x: selX}, 1);
+
+    tm.set(selPanel, {y: '-=100%'}, 1);
+    tm.set(infPanel, {y: '-=100%'}, 1);
+
+    tm.set(selPanel, {display: 'none'}, 1);
+    tm.set(infPanel, {display: 'none'}, 1);
+}
+
+// Animation Routine:
+// 1) Follows after hide_panels
+// 2) Make the panels displayed as blocks
+// 3) Move them to the opposite horizontal side offscreen
+// 4) Slide them into normal position
+function showPanels(tm, side) {
+    let selPanel;
+    let infPanel;
+    let selX;
+    let infX;
+
+    if(side === 'models') {
+        selPanel = mdSelId;
+        infPanel = mdInfId;
+        selX = '-=200%';
+        infX = '+=200%';
+    } else {
+        selPanel = dsSelId;
+        infPanel = dsInfId;
+        selX = '+=200%';
+        infX = '-=200%';
+    }
+
+    // Set display to block
+    tm.set(selPanel, {display:'block'}, 1.5);
+    tm.set(infPanel, {display:'block'}, 1.5);
+
+    // Start them off on the opposite side
+    tm.from(selPanel, {x:selX}, 1.5);
+    tm.from(infPanel, {x:infX}, 1.5);
+}
 
  function panelHeaderClicked(side) {
-    let tm = gsap.timeline()
-    toggle_back_button(tm, 0, 2);
+    const tm = gsap.timeline()
+    toggleBackButton(tm, 0, 2);
 
-    hide_panels(tm, side);
-    show_panels(tm, side);
-    panel_header(side);
+    hidePanels(tm, side);
+    showPanels(tm, side);
+    dimInfoPanelHeader(side);
     tm.play();
  }
 
-function datasetItemSelect(item) {
-    const dataset = data.datasets.find(obj => obj.name == item);
+ /* --- Menu Selections --- */
 
-    const header = ds_info_panel.querySelector('.info-header > p');
-    const content = ds_info_panel.querySelector('.info-content > p');
+function datasetItemSelected(item) {
+    const dataset = data.datasets.find(obj => obj.name === item);
 
-    header.textContent = dataset.name;
-    content.textContent = dataset.description;
-}
+    const header = dsInfoPanel.querySelector('.info-header > p');
+    const content = dsInfoPanel.querySelector('.info-content > p');
+    const contBttn = dsInfoPanel.querySelector('.info-button > button');
 
-function modelItemSelect(item) {
-    const dataset = data.models.find(obj => obj.name == item);
-
-    const header = md_info_panel.querySelector('.info-header > p');
-    const content = md_info_panel.querySelector('.info-content > p');
-    const cont_bttn = md_info_panel.querySelector('.info-button > button');
-
+    // Update the info display with information about selected dataset
     header.textContent = dataset.name;
     content.textContent = dataset.description;
 
-    cont_bttn.onclick = function () { location.href = dataset.link; }
+    contBttn.onclick = function () { location.href = dataset.link; }
 }
 
-const back_button = document.getElementById('back-button').querySelector('button');
-back_button.onclick = function () { location.href = '/'; };
+function modelItemSelected(item) {
+    const dataset = data.models.find(obj => obj.name === item);
+
+    const header = mdInfoPanel.querySelector('.info-header > p');
+    const content = mdInfoPanel.querySelector('.info-content > p');
+    const contBttn = mdInfoPanel.querySelector('.info-button > button');
+
+    // Update the info display with information about selected model
+    header.textContent = dataset.name;
+    content.textContent = dataset.description;
+
+    contBttn.onclick = function () { location.href = dataset.link; }
+}
+
+/* --- Back button Click ---*/
+
+backButton.onclick = function () { location.href = '/'; };

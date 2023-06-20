@@ -1,167 +1,189 @@
 // Register the plugins
 gsap.registerPlugin(CSSPlugin, TextPlugin);
 
+/* --- Load elements from the HTML DOM --- */
+
 const body = document.getElementsByTagName("body");
 
-const up_row = document.getElementById("upper-row");
-const dw_row = document.getElementById("lower-row");
+// Rows
+const upperRow = document.getElementById("upper-row");
+const lowerRow = document.getElementById("lower-row");
 
-const ul_panel = document.getElementById("ul-panel");
-const ur_panel = document.getElementById("ur-panel");
-const bl_panel = document.getElementById("bl-panel");
-const br_panel = document.getElementById("br-panel");
+// Panels
+const ulPanel = document.getElementById("ul-panel");
+const urPanel = document.getElementById("ur-panel");
+const blPanel = document.getElementById("bl-panel");
+const brPanel = document.getElementById("br-panel");
 
-const ul_interior = document.getElementById("ul-interior")
-const ur_interior = document.getElementById("ur-interior")
-const bl_interior = document.getElementById("bl-interior")
-const br_interior = document.getElementById("br-interior")
+// Panel Interiors
+const ulInterior = document.getElementById("ul-interior")
+const urInterior = document.getElementById("ur-interior")
+const blInterior = document.getElementById("bl-interior")
+const brInterior = document.getElementById("br-interior")
 
-const ul_bttn = ul_interior.getElementsByTagName('button')[0];
-const ur_bttn = ur_interior.getElementsByTagName('button')[0];
-const bl_bttn = bl_interior.getElementsByTagName('button')[0];
-const br_bttn = br_interior.getElementsByTagName('button')[0];
+// Panel Buttons
+const ulBttn = ulInterior.getElementsByTagName('button')[0];
+const urBttn = urInterior.getElementsByTagName('button')[0];
+const blBttn = blInterior.getElementsByTagName('button')[0];
+const brBttn = brInterior.getElementsByTagName('button')[0];
 
-ul_panel.addEventListener('mouseenter', () => entering(0,0));
-ur_panel.addEventListener('mouseenter', () => entering(0,1));
-bl_panel.addEventListener('mouseenter', () => entering(1,0));
-br_panel.addEventListener('mouseenter', () => entering(1,1));
+/* --- Utility for organizing elements for each quadrant --- */
 
-rows = Array();
-rows.push(up_row);
-rows.push(dw_row);
-
-panels = Array();
-panels.push(Array());
-panels.push(Array());
-panels[0].push(ul_panel);
-panels[0].push(ur_panel);
-panels[1].push(bl_panel);
-panels[1].push(br_panel);
-
-interiors = Array();
-interiors.push(Array());
-interiors.push(Array());
-interiors[0].push(ul_interior);
-interiors[0].push(ur_interior);
-interiors[1].push(bl_interior);
-interiors[1].push(br_interior);
-
-buttons = Array();
-buttons.push(Array());
-buttons.push(Array());
-buttons[0].push(ul_bttn);
-buttons[0].push(ur_bttn);
-buttons[1].push(bl_bttn);
-buttons[1].push(br_bttn);
-
-color1 = '#545B77';
-color2 = '#F2D8D8';
-color3 = '#5C8984';
-color4 = '#374259';
-
-default_row = {'height': '50%'};
-
-expand_row = {'height': '80%'};
-
-shrink_row = {'height': '20%'};
-
-border_radii = Array();
-border_radii.push(Array());
-border_radii.push(Array());
-border_radii[0].push('0 0 30% 0');
-border_radii[0].push('0 0 0 30%');
-border_radii[1].push('0 30% 0 0');
-border_radii[1].push('30% 0 0 0');
-
-paddings = Array();
-paddings.push(Array());
-paddings.push(Array());
-paddings[0].push('0 40px 40px 0');
-paddings[0].push('0 0 40px 40px');
-paddings[1].push('40px 40px 0 0');
-paddings[1].push('40px 0 0 40px');
-
-expand_panel = {
-    'width': '75%',
-    'background-color': color4,
-    'color': 'white',
-};
-
-shrink_panel = {
-    'width': '25%',
-    'background-color': color1,
-    'color': 'black',
-    'border-radius': '0% 0% 0% 0%',
-};
-
-other_panel = {
-    'width': '50%',
-    'background-color': color1,
-    'color': 'black',
-    'border-radius': '0% 0% 0% 0%',
-}
-
-expand_interior = { 'background-color': color3 };
-
-default_interior = { 'background-color': color1 }
-
-default_text = { 'font-size': '75px',
-                 'background-color': color1,
-                 'color': 'black'  };
-
-expand_text = { 'font-size': '200px',
-                'background-color': color3,
-                'color': 'white' };
-
-const ur_ani = gsap.timeline();
-
-function adjust_rows(r) {
-    gsap.to(rows[r], expand_row);
-    gsap.to(rows[+ !r], shrink_row);
-}
-
-let body_set = false;
-
-function adjust_panels(r, c) {
-    if(!body_set) {
-        gsap.to(body, {'background-color':color1});
-        body_set = true;
+class Quad {
+    constructor() {
+        this.grid = [[-1,-1],[-1,-1]];
     }
 
-    gsap.to(panels[r][c], expand_panel);
-    gsap.to(panels[r][+ !c], shrink_panel);
-    gsap.to(panels[+ !r][0], other_panel);
-    gsap.to(panels[+ !r][1], other_panel);
+    insert(r, c, item) {
+        this.grid[r][c] = item;
+    }
 
-
-    gsap.to(panels[r][c], {'border-radius': border_radii[r][c]});
-    gsap.to(panels[r][c], {'padding': paddings[r][c]});
+    getItem(r, c) {
+        return this.grid[r][c];
+    }
 }
 
-function adjust_interiors(r, c) {
-    gsap.to(interiors[r][c], expand_interior);
-    gsap.to(interiors[r][+ !c], default_interior);
-    gsap.to(interiors[+ !r][0], default_interior);
-    gsap.to(interiors[+ !r][1], default_interior);
+/* --- Create the arrays for automating access to the HTML page ---- */
 
-    gsap.to(interiors[r][c], {'border-radius': border_radii[r][c]});
+const rows = Array();
+rows.push(upperRow);
+rows.push(lowerRow);
+
+const panels = new Quad();
+panels.insert(0,0, ulPanel);
+panels.insert(0,1, urPanel);
+panels.insert(1,0, blPanel);
+panels.insert(1,1, brPanel);
+
+const interiors = new Quad();
+interiors.insert(0,0, ulInterior);
+interiors.insert(0,1, urInterior);
+interiors.insert(1,0, blInterior);
+interiors.insert(1,1, brInterior);
+
+const buttons = new Quad();
+buttons.insert(0,0, ulBttn);
+buttons.insert(0,1, urBttn);
+buttons.insert(1,0, blBttn);
+buttons.insert(1,1, brBttn);
+
+/* --- Colors --- */
+
+beige = '#F2D8D8';
+green = '#5C8984';
+lightGray = '#545B77';
+darkGray = '#374259';
+
+/* --- Layouts for each panel --- */
+
+const borderRadii = new Quad();
+borderRadii.insert(0,0, '0 0 30% 0');
+borderRadii.insert(0,1, '0 0 0 30%');
+borderRadii.insert(1,0, '0 30% 0 0');
+borderRadii.insert(1,1, '30% 0 0 0');
+
+const paddings = new Quad();
+paddings.insert(0,0, '0 40px 40px 0');
+paddings.insert(0,1, '0 0 40px 40px');
+paddings.insert(1,0, '40px 40px 0 0');
+paddings.insert(1,1, '40px 0 0 40px');
+
+/* --- CSS Styles based on status --- */
+
+defaultRow = {'height': '50%'};
+expandedRow = {'height': '80%'};
+shrunkenRow = {'height': '20%'};
+
+expandedPanel = {
+    'width': '75%',
+    'background-color': darkGray,
+    'color': 'white',
+};
+shrunkenPanel = {
+    'width': '25%',
+    'background-color': lightGray,
+    'color': 'black',
+    'border-radius': '0% 0% 0% 0%',
+};
+defaultPanel = {
+    'width': '50%',
+    'background-color': lightGray,
+    'color': 'black',
+    'border-radius': '0% 0% 0% 0%',
 }
 
-function adjust_text(r, c) {
-    gsap.to(buttons[r][c], expand_text);
-    gsap.to(buttons[r][+ !c], default_text);
-    gsap.to(buttons[+ !r][0], default_text);
-    gsap.to(buttons[+ !r][1], default_text);
+expandedInterior = { 'background-color': green };
+defaultInterior = { 'background-color': lightGray }
+
+
+expandedText = { 'font-size': '200px',
+                'background-color': green,
+                'color': 'white' };
+defaultText = { 'font-size': '75px',
+                 'background-color': lightGray,
+                 'color': 'black'  };
+
+/* --- Animation Code --- */
+
+function adjustRows(tm, r) {
+    tm.to(rows[r], expandedRow, 0);
+    tm.to(rows[+ !r], shrunkenRow, 0);
+}
+
+let bodySet = false;
+
+function adjustPanels(tm, r, c) {
+    if(!bodySet) {
+        tm.to(body, {'background-color':lightGray}, 0);
+        bodySet = true;
+    }
+
+    tm.to(panels.getItem(r,c), expandedPanel, 0);
+    tm.to(panels.getItem(r,+ !c), shrunkenPanel, 0);
+    tm.to(panels.getItem(+ !r, 0), defaultPanel, 0);
+    tm.to(panels.getItem(+ !r, 1), defaultPanel, 0);
+
+    tm.to(panels.getItem(r, c), {'border-radius':borderRadii.getItem(r,c)}, 0);
+    tm.to(panels.getItem(r, c), {'padding': paddings.getItem(r,c)}, 0);
+}
+
+function adjustInteriors(tm, r, c) {
+    tm.to(interiors.getItem(r, c), expandedInterior, 0);
+    tm.to(interiors.getItem(r,+ !c), defaultInterior, 0);
+    tm.to(interiors.getItem(+ !r, 0), defaultInterior, 0);
+    tm.to(interiors.getItem(+ !r, 1), defaultInterior, 0);
+
+    tm.to(interiors.getItem(r, c), {'border-radius': borderRadii.getItem(r,c)}, 0);
+}
+
+function adjustText(tm, r, c) {
+    tm.to(buttons.getItem(r, c), expandedText, 0);
+    tm.to(buttons.getItem(r,+ !c), defaultText, 0);
+    tm.to(buttons.getItem(+ !r, 0), defaultText, 0);
+    tm.to(buttons.getItem(+ !r, 1), defaultText, 0);
 }
 
 function entering(r, c) {
-    adjust_rows(r);
-    adjust_panels(r, c);
-    adjust_interiors(r, c);
-    adjust_text(r,c);
+    const tm = gsap.timeline();
+
+    adjustRows(tm, r);
+    adjustPanels(tm, r, c);
+    adjustInteriors(tm, r, c);
+    adjustText(tm, r,c);
+
+    tm.play();
 }
 
-ul_bttn.onclick = function () { location.href = 'solar'; };
-ur_bttn.onclick = function () { location.href = 'wind'; };
-bl_bttn.onclick = function () { location.href = 'insights'; };
-br_bttn.onclick = function () { location.href = 'contact'; };
+/* --- Event listeners --- */
+
+ulPanel.addEventListener('mouseenter', () => entering(0,0));
+urPanel.addEventListener('mouseenter', () => entering(0,1));
+blPanel.addEventListener('mouseenter', () => entering(1,0));
+brPanel.addEventListener('mouseenter', () => entering(1,1));
+
+/* --- Redirects --- */
+
+ulBttn.onclick = function () { location.href = 'solar'; };
+urBttn.onclick = function () { location.href = 'wind'; };
+blBttn.onclick = function () { location.href = 'insights'; };
+brBttn.onclick = function () { location.href = 'contact'; };

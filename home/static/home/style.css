@@ -6,6 +6,8 @@ body {
     margin: 0;
     padding: 0;
 
+    overflow: hidden;
+
     /* Webpage font */
     font-family: 'Julius Sans One', sans-serif;
     color: black;
