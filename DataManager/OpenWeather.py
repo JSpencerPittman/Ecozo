@@ -78,6 +78,11 @@ class OpenWeatherAPI:
         # Convert into a pandas DataFrame
         weather_df = pd.DataFrame(weather_entries)
         self._format_weather_dataframe(weather_df)
+
+        # Apply the timezone to datetime
+        tz = int(weather['city']['timezone'])
+        weather_df['datetime'] = weather_df['datetime'] + tz
+
         return weather_df
 
     def status(self):
