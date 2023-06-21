@@ -1,5 +1,5 @@
-from WindPower.WindTurbine import WindTurbine
-from WindPower.Aeolus import Aeolus
+from windpower.WindTurbine import WindTurbine
+from windpower.Aeolus import Aeolus
 
 
 def aeolus_link(request):

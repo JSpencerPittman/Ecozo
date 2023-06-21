@@ -1,5 +1,5 @@
-from SolarIrrad.models.charlie import Charlie
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.charlie import Charlie
+from irradiance.models.model import SolarPanel
 
 
 def charlie_link(request):

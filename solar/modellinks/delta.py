@@ -1,5 +1,5 @@
-from SolarIrrad.models.delta import Delta
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.delta import Delta
+from irradiance.models.model import SolarPanel
 from DataManager.OpenWeather import OpenWeatherAPI
 
 

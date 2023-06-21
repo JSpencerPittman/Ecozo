@@ -1,5 +1,5 @@
 from DataManager.WorldClim import WorldClimAPI
-from SolarIrrad.models.model import SolarIrradModel, SolarPanel
+from irradiance.models.model import SolarIrradModel, SolarPanel
 from datetime import datetime, timedelta
 
 MONTHS_IN_YEAR = 12

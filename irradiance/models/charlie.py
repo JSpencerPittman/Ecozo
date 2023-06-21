@@ -1,7 +1,7 @@
 from DataManager.WorldClim import WorldClimAPI
-from SolarIrrad.models.model import SolarIrradModel, SolarPanel
+from irradiance.models.model import SolarIrradModel, SolarPanel
 from datetime import datetime, timedelta
-from SolarIrrad.preprocessing.charlie import DataPreprocessorCharlie
+from irradiance.preprocessing.charlie import DataPreprocessorCharlie
 
 MONTHS_IN_YEAR = 12
 DAYS_IN_YEAR = 365

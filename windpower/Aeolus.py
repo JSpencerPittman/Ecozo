@@ -1,7 +1,7 @@
-from WindPower.WindTurbine import WindTurbine
-from WindPower.AtmosphericData import AtmosphericData
+from windpower.WindTurbine import WindTurbine
+from windpower.AtmosphericData import AtmosphericData
 from DataManager.WindTK import WindTKAPI
-from WindPower.Evaluator import PowerEvaluator
+from windpower.Evaluator import PowerEvaluator
 from datetime import datetime
 
 AVG_DAYS_IN_MONTH = 30

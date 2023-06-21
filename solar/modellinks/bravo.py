@@ -1,5 +1,5 @@
-from SolarIrrad.models.bravo import Bravo
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.bravo import Bravo
+from irradiance.models.model import SolarPanel
 from DataManager.OpenWeather import OpenWeatherAPI
 
 

@@ -1,11 +1,11 @@
 from DataManager.PSM3 import PSM3API
-from SolarIrrad.models.model import SolarIrradModel
-from SolarIrrad.preprocessing.bravo import DataPreprocessorPSM3, DataPreprocessorOpenWeather
+from irradiance.models.model import SolarIrradModel
+from irradiance.preprocessing.bravo import DataPreprocessorPSM3, DataPreprocessorOpenWeather
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.model import SolarPanel
 from scipy.integrate import quad
 import pickle
 import os

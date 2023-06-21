@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from SolarIrrad.preprocessing.DataPreprocessor import DataPreprocessor
+from irradiance.preprocessing.DataPreprocessor import DataPreprocessor
 import math
 from datetime import datetime
 import ephem
@@ -183,13 +183,13 @@ class DataPreprocessorOpenWeather(DataPreprocessorBravo):
             'temp': 'Temperature',
             'pressure': 'Pressure',
             'humidity': 'Relative Humidity',
-            'speed': 'WindPower Speed',
-            'deg': 'WindPower Direction',
+            'speed': 'Wind Speed',
+            'deg': 'Wind Direction',
         }
         self.data.rename(columns=column_names, inplace=True)
 
         # Match Column Ordering
         ordering = ['Temperature', 'Relative Humidity', 'Solar Zenith Angle', 'Pressure',
-                    'WindPower Direction', 'WindPower Speed', 'wint_sol', 'midnight',
+                    'Wind Direction', 'Wind Speed', 'wint_sol', 'midnight',
                     'blockage', 'cloudiness']
         self.data = self.data[ordering]

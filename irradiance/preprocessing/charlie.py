@@ -1,5 +1,5 @@
-from SolarIrrad.preprocessing.DataPreprocessor import DataPreprocessor
-from SolarIrrad.models.model import SolarPanel
+from irradiance.preprocessing.DataPreprocessor import DataPreprocessor
+from irradiance.models.model import SolarPanel
 import pytz
 import ephem
 from datetime import datetime, timedelta
@@ -80,7 +80,7 @@ class DataPreprocessorCharlie(DataPreprocessor):
 
         p_exposed = srad * self.solar_panel.area  # Kilojoules
 
-        p_useable = p_exposed * self.solar_panel.efficiency * self.solar_panel.performance_ratio  # Kilojoules
+        p_useable = p_exposed * self.solar_panel.efficiency # Kilojoules
         p_useable *= 1000  # Joules
 
         def wattage_no_capacity(x):
@@ -93,6 +93,7 @@ class DataPreprocessorCharlie(DataPreprocessor):
             return min(self.solar_panel.capacity, w_nc)
 
         result, _ = quad(wattage_capacity, 0, daytime)
+        result *= self.solar_panel.performance_ratio
         result /= 3.6e6
 
         return result

@@ -1,12 +1,13 @@
 import yaml
 
 from DataManager.PSM3 import PSM3API
-from SolarIrrad.models.model import SolarIrradModel, Results, ModelPackage
-from SolarIrrad.preprocessing.bravo import DataPreprocessorPSM3, DataPreprocessorOpenWeather
+from irradiance.models.model import SolarIrradModel, Results, ModelPackage
+from irradiance.preprocessing.bravo import DataPreprocessorPSM3, DataPreprocessorOpenWeather
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.model import SolarPanel
+from util.piecewise import Piecewise
 from scipy.integrate import quad
 import pickle
 import os
@@ -45,18 +46,16 @@ class Delta(SolarIrradModel):
         self.results_hyb = Results("regressor")
 
         self.pred = None
+        self.pw = None
 
     def hour(self):
-        exposure = self._calc_irrads(1)
-        return self._calc_power(exposure)
+        return self._calc_power(1)
 
     def day(self):
-        exposure = self._calc_irrads(8)
-        return self._calc_power(exposure)
+        return self._calc_power(8)
 
     def five_days(self):
-        exposure = self._calc_irrads(40)
-        return self._calc_power(exposure)
+        return self._calc_power(40)
 
     def month(self):
         return -1
@@ -221,7 +220,7 @@ class Delta(SolarIrradModel):
             if os.path.exists(self.pkl_path):
                 self.load()
             else:
-                self.train()
+                self.train(verbose=True)
 
         ow_dataformatter = DataPreprocessorOpenWeather(data, lat, lon)
         data = ow_dataformatter.format()
@@ -229,6 +228,7 @@ class Delta(SolarIrradModel):
         self.pred = self._hybrid_predict(data)
         self.pred *= 3.6  # Convert from J/m^2/s to kJ/m^2/hr
 
+        self.pw = Piecewise(y=self.pred, x_int=3)
         return self.pred
 
     def _transform_data(self, data, stage, training):
@@ -248,45 +248,29 @@ class Delta(SolarIrradModel):
                 data = self.ss_reg.transform(data)
         return data
 
-    def _calc_irrads(self, time):
-        capacity = self.solar_panel.capacity  # Watts
-        capacity *= 3.6  # kJ/hr
+    def _calc_power(self, time):
+        """
+        Calculate how much power was generated for a specific time interval
+        :param time: how many hours in advance
+        :return: total power generated in kWh
+        """
 
-        def derive_line(pred_index):
-            p1, p2 = self.pred[pred_index], self.pred[pred_index + 1]
-            slope = (1 / 3) * (p2 - p1)
-            y_intercept = p2 - (3 * slope)
+        def estimate_power_at_instant(x):
+            est_pow = self.pw.get_y(x)  # solar irradiance w/m^2
+            est_pow *= 3.6  # Convert to kJ/m^2/hr
 
-            def line(x):
-                return slope * x + y_intercept
+            # How much energy is the solar panel exposed to
+            est_pow *= self.solar_panel.efficiency * self.solar_panel.area
 
-            def limited_line(x):
-                return min(line(x), capacity)
+            # factor in capacity
+            capacity = self.solar_panel.capacity * 3.6  # In kJ/hr
+            est_pow = min(capacity, est_pow)  # factor in capacity
 
-            return limited_line
+            return est_pow
 
-        sum_irrads = 0
-        i = 0
+        generated_power, _ = quad(estimate_power_at_instant, 0, time)
 
-        while time >= 3:
-            f = derive_line(i)
+        actual_power = generated_power * self.solar_panel.performance_ratio
+        actual_power = SolarPanel.kilojoule_to_kilowatthour(actual_power)
 
-            results, _ = quad(f, 0, 3)
-            sum_irrads += results
-
-            i += 1
-            time -= 3
-
-        if time > 0:
-            f = derive_line(i)
-
-            results, _ = quad(f, 0, time)
-            sum_irrads += results
-
-        return sum_irrads
-
-    def _calc_power(self, exposure):
-        power_exposed = exposure * self.solar_panel.area
-        power_useable = power_exposed * self.solar_panel.efficiency * self.solar_panel.performance_ratio
-        generated_power = SolarPanel.kilojoule_to_kilowatthour(power_useable)
-        return generated_power
+        return actual_power

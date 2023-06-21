@@ -1,5 +1,5 @@
-from SolarIrrad.models.alpha import Alpha
-from SolarIrrad.models.model import SolarPanel
+from irradiance.models.alpha import Alpha
+from irradiance.models.model import SolarPanel
 
 
 def alpha_link(request):

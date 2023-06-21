@@ -69,7 +69,7 @@ def solar_geo(request):
 
     locator = Nominatim(user_agent="myGeocoder")
     coordinates = f"{latitude}, {longitude}"
-    location = locator.reverse(coordinates)
+    location = locator.reverse(coordinates, timeout=10000)
 
     city = location.raw['address']['city']
     country = location.raw['address']['country']

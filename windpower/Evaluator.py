@@ -1,7 +1,7 @@
 import math
 from abc import ABC, abstractmethod
-from WindPower.WindTurbine import WindTurbine
-from WindPower.AtmosphericData import AtmosphericData
+from windpower.WindTurbine import WindTurbine
+from windpower.AtmosphericData import AtmosphericData
 
 SECONDS_IN_DAY = 60 * 60 * 24  # s
 
