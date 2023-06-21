@@ -39,6 +39,7 @@ def solar(request):
                 month=charlie_results['month'],
                 year=charlie_results['year']
             )
+            print(results)
 
             request.session['solar_power'] = results
             request.session['solar_power_satisfied'] = True

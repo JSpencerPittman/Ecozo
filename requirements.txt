@@ -40,7 +40,9 @@ datapane==0.16.5
 debugpy==1.6.7
 decorator==5.1.1
 defusedxml==0.7.1
+dj-database-url==2.0.0
 Django==4.2.1
+django-heroku==0.3.1
 django-livereload-server==0.4
 dominate==2.8.0
 dulwich==0.20.50
@@ -56,6 +58,7 @@ furl==2.1.3
 geographiclib==2.0
 geopy==2.3.0
 glom==23.3.0
+gunicorn==20.1.0
 idna==3.4
 importlib-metadata==6.6.0
 importlib-resources==5.12.0
@@ -118,6 +121,7 @@ posthog==2.5.0
 prometheus-client==0.16.0
 prompt-toolkit==3.0.38
 psutil==5.9.5
+psycopg2==2.9.6
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pyarrow==10.0.1
@@ -130,6 +134,7 @@ pyproj==3.5.0
 PYroMat==2.2.4
 pyrsistent==0.19.3
 python-dateutil==2.8.2
+python-decouple==3.8
 python-json-logger==2.0.7
 pytz==2023.3
 PyYAML==6.0
@@ -172,6 +177,7 @@ webcolors==1.13
 webencodings==0.5.1
 websocket-client==1.5.1
 Werkzeug==2.3.4
+whitenoise==6.5.0
 widgetsnbextension==4.0.7
 xarray==2023.1.0
 zipp==3.15.0
