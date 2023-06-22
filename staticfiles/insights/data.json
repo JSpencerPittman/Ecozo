@@ -1,0 +1,41 @@
+{
+    "datasets": [
+        {
+            "name": "openweather",
+            "description": "The OpenWeather API offers a comprehensive dataset that enables precise power predictions for the next hour, as well as up to five days, considering the prevailing weather conditions.This functionality facilitates accurate forecasting of power generation from wind turbines or solar panels. By incorporating real-time weather data into the prediction models, users can account for the current weather conditions and make informed decisions regarding power generation. Whether it is optimizing the performance of renewable energy systems or planning energy distribution, the OpenWeather API provides the necessary tools to leverage weather information effectively. With its robust and reliable weather forecasts, this API empowers users to anticipate and adapt to changing weather patterns, ensuring efficient and precise power predictions for various time horizons.",
+            "link": "https://medium.com/@jspencerpittman/openweather-data-exploration-cedc437a166"
+        },
+        {
+            "name": "psm3",
+            "description": "The Physical Solar Model 3 (PSM3) dataset is a comprehensive resource that offers valuable information on solar irradiation, encompassing Global Horizontal Irradiance (GHI), Diffuse Horizontal Irradiance (DHI), and Direct Normal Irradiance (DNI). Alongside these measurements, the dataset includes corresponding clear-sky values, allowing users to evaluate and analyze the impact of atmospheric conditions on solar radiation. Additionally, the PSM3 dataset provides supplementary data such as weather conditions and temperature, enabling a more comprehensive understanding of the solar energy potential at a given location. By leveraging this dataset, researchers, scientists, and solar energy practitioners can gain insights into solar irradiation patterns, optimize solar energy system designs, and develop accurate solar energy forecasting models. The PSM3 dataset serves as a valuable resource for facilitating informed decision-making and enhancing the efficiency and effectiveness of solar energy utilization.",
+            "link": "https://medium.com/@jspencerpittman/nrels-psm3-data-exploration-5b73c1b402a4"
+        },
+        {
+            "name": "windtk",
+            "description": "The Wind Toolkit API is a comprehensive data resource that offers valuable information regarding atmospheric conditions, primarily focused on air temperatures, wind speed and direction, air pressure, and relative humidity at different altitudes. This API provides users with access to a wide range of meteorological measurements that are crucial for understanding wind patterns and their implications. By accessing data on air temperatures, users can gain insights into the temperature variations at different altitudes, aiding in the analysis of atmospheric stability and wind behavior. The wind speed and direction information allows for accurate characterization of wind patterns, which is essential for wind energy applications, weather modeling, and various other industries reliant on wind data. Additionally, the API provides air pressure data, enabling users to assess atmospheric conditions and their impact on wind behavior. Furthermore, the inclusion of relative humidity at the surface helps users understand moisture content in the air, contributing to more comprehensive meteorological analyses. Overall, the Wind Toolkit API serves as a valuable tool for researchers, meteorologists, and wind energy professionals seeking reliable and detailed atmospheric data for a wide range of applications.",
+            "link": "https://medium.com/@jspencerpittman/nrels-wind-toolkit-data-exploration-a9c9967099f8"
+        },
+        {
+            "name": "worldclim",
+            "description": "The WordlClim dataset encompasses a comprehensive collection of climate variables, offering valuable information on various parameters averaged over the period from 1970 to 2000. This dataset includes essential climate metrics such as minimum, maximum, and average temperatures for each month, providing insights into temperature patterns and variations throughout the year. Additionally, WordlClim provides precipitation data, enabling analysis of rainfall patterns and distribution over different months. The dataset also includes wind speed information, facilitating the understanding of wind patterns and their impact on climate conditions. Another crucial aspect of the WordlClim dataset is its provision of elevation data, which aids in analyzing the influence of topography on climate variables. Moreover, the dataset includes solar radiation values, allowing users to assess the availability and intensity of solar energy across different regions. With its extensive coverage of climate variables, the WordlClim dataset serves as a valuable resource for researchers, climate scientists, and professionals seeking comprehensive climate data for various environmental and climate modeling applications.",
+            "link": "https://medium.com/@jspencerpittman/nrels-wind-toolkit-data-exploration-a9c9967099f8"
+        }
+    ],
+    "models": [
+        {
+            "name": "charlie",
+            "description": "The Charlie model employs the WorldClim datasets to forecast the long-term power generation of solar panels. Specifically, it predicts the quantity of power generated over a monthly or annual period. This is accomplished by utilizing average values of monthly climatic variables.",
+            "link": "https://medium.com/@jspencerpittman/charlie-model-298c7c9699bf"
+        },
+        {
+            "name": "delta",
+            "description": "The Delta model, specifically tailored for solar power, is a hybrid model that specializes in short-term predictions for solar power generation spanning from 1 hour to 5 days in advance. It is trained on the PSM3 dataset, and in conjunction with real-time weather data obtained from openweatherdata, it leverages this information to make accurate real-time solar power forecasts.",
+            "link": "https://medium.com/@jspencerpittman/delta-model-3f21a3752125"
+        },
+        {
+            "name": "aeolus",
+            "description": "The Aeolus model utilizes wind speed data, which is averaged over five-day intervals and obtained from multiple altitudes. This model employs linear interpolation techniques to estimate wind speeds at different altitudes, thereby enabling the estimation of wind power generation at those altitudes.",
+            "link": "https://medium.com/@jspencerpittman/aeolus-model-61804f4576e4"
+        }
+    ]
+}

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../static/solar/style.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'solar/style.css' %}">
     </head>
     <body>
         {% csrf_token %}
@@ -109,6 +110,7 @@
             <p id="footer-text">Created by Jason Pittman</p>
         </div>
 
-        <script src="../static/solar/script.js"></script>
+        {% load static %}
+        <script src="{% static 'solar/script.js' %}" type="text/javascript"></script>
     </body>
 </html>

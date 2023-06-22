@@ -1,0 +1,211 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap'); /*USAGE: font-family: 'Julius Sans One', sans-serif;*/
+
+body {
+    /* Remove Outermost Padding*/
+    margin: 0;
+    padding: 0;
+
+    /* Webpage font */
+    font-family: 'Julius Sans One', sans-serif;
+    color: white;
+}
+
+/* General Page Classes */
+
+.body-panel {
+    height: 320px;
+    display: flex;
+}
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.horiz-spread {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vert-spread {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.panel-label {
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5%;
+    height: 100%;
+}
+
+.panel-label-text {
+    writing-mode: vertical-lr;
+}
+
+.left-cont {
+    width: 40%;
+    height: 100%;
+}
+
+.right-cont {
+    width: 55%;
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0% 3%;
+}
+
+.button {
+    font-family: 'Julius Sans One', sans-serif;
+    border: none;
+}
+
+.body-button {
+    height: 150px;
+    width: 75%;
+    font-size: 24px;
+}
+
+
+/* Header Specific Styling */
+
+#hd-panel {
+    height: 100px;
+    background-color: #5C8984;
+}
+
+#hd-cont {
+    margin: 0% 3%; 
+    height: 100%;
+    font-size: 32px;
+}
+
+#hd-button {
+    height: 60px;
+    width: 150px;
+    font-size: 32px;
+    background-color: #7FA7A2;
+    border-radius: 100%;
+    color: white;
+}
+
+/* Location Specific Styling */
+
+#lc-panel { background-color: #F2D8D8; }
+
+#lc-button { 
+    background: #545B77;
+    color: white;
+}
+
+.lc-content {
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5% 0;
+}
+
+#lc-labels { width: 40%; }
+
+#lc-values { width: 60%; }
+
+#lc-label { background: #545B77; }
+
+/* Solar Panel Specific Styling */
+
+#sp-panel {
+    background-color: #545B77;
+    height: 360px;
+}
+
+#sp-button {
+    background: #5C8984;
+    color: black;
+}
+
+#sp-form {
+    width: 100%;
+    margin: 3% 0%;
+}
+
+.sp-textedit-cont {
+    width: 100%;
+    height: 65px;
+    background-color: #374259;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0% 5%; 
+}
+
+.sp-textedit-label {
+    width: 20%;
+    text-align: left;
+    font-size: 20px;
+}
+
+.sp-textedit {
+    height: 65px;
+    width: 80%;
+    background-color: #374259;
+    box-sizing: border-box;
+    padding: 5;
+    
+    border: 0;
+    outline: none;
+    
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+#sp-label {
+    background: #5C8984;
+    color: black;
+}
+
+/* Power Specific Styling */
+
+#pw-panel { background-color: #374259; }
+
+#pw-main-cont { width: 95%; }
+
+#pw-results {     
+    height: 80%;
+    justify-content: space-evenly;
+}
+
+.pw-res-item-text {
+    text-align: center;
+    font-size: 24px;
+}
+
+#pw-units {
+    height: 20%;
+    text-align: center;
+}
+
+#pw-label {
+    background: #F2D8D8;
+    color: black;
+}
+
+/* Footer Specific Styling */
+
+#ft-panel {
+    height: 220px;
+    background-color: #5C8984;
+}
+
+#footer-text {
+    margin: 0;
+    font-size: 32px;
+}
