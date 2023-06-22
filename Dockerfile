@@ -18,8 +18,11 @@ COPY wsgitest.py /var/www/html/wsgitest.py
 RUN chown www-data:www-data /var/www/html/wsgitest.py
 RUN chmod 775 /var/www/html/wsgitest.py
 
+# Set site configurations
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 COPY site-config.conf /etc/apache2/sites-enabled/000-default.conf
 
-# utilities
-RUN apt install nano -y
+# Install app dependencies
+COPY requirements.txt /var/www/html
+WORKDIR /var/www/html
+RUN pip install -r requirements.txt
