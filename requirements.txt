@@ -42,7 +42,6 @@ decorator==5.1.1
 defusedxml==0.7.1
 dj-database-url==2.0.0
 Django==4.2.1
-django-heroku==0.3.1
 django-livereload-server==0.4
 dominate==2.8.0
 dulwich==0.20.50
