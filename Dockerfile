@@ -31,4 +31,4 @@ RUN export C_INCLUDE_PATH=/usr/local/gdal
 COPY requirements.txt /var/www/html
 WORKDIR /var/www/html
 RUN pip install --upgrade pip
-# RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt

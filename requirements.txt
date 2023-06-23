@@ -10,7 +10,6 @@ asttokens==2.2.1
 attrs==23.1.0
 backcall==0.2.0
 backoff==2.2.1
-backports.zoneinfo==0.2.1
 beautifulsoup4==4.12.2
 bleach==6.0.0
 blinker==1.6.2
