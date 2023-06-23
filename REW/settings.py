@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     "insights",
     "home",
     "contact",
-    "mod_wsgi.server"
 ]
 
 MIDDLEWARE = [

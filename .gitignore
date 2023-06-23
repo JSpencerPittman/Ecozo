@@ -3,9 +3,12 @@ data
 *.pkl
 *.db
 *.tif
-*.yaml
+defaults.yaml
+keys.yaml
 .ipynb_checkpoints
 *.sqlite3
 webdev
 .DS_Store
 __pycache__
+*.pyc
+__pycache__/*

@@ -1,0 +1,36 @@
+Miami:
+  latitude: 25.7617
+  longitude: -80.1918
+Seattle:
+  latitude: 47.6062
+  longitude: -122.3321
+Phoenix:
+  latitude: 33.4484
+  longitude: -112.0740
+Denver:
+  latitude: 39.7392
+  longitude: -104.9903
+Chicago:
+  latitude: 41.8781
+  longitude: -87.6298
+New Orleans:
+  latitude: 29.9511
+  longitude: -90.0715
+Minneapolis:
+  latitude: 44.9778
+  longitude: -93.2650
+San Francisco:
+  latitude: 37.7749
+  longitude: -122.4194
+Houston:
+  latitude: 29.7604
+  longitude: -95.3698
+Albuquerque:
+  latitude: 35.0844
+  longitude: -106.6504
+Detroit:
+  latitude: 42.3314
+  longitude: -83.0458
+Salt Lake City:
+  latitude: 40.7608
+  longitude: -111.8910
