@@ -65,6 +65,8 @@ class WorldClimAPI:
             except requests.exceptions.RequestException as e:
                 print(f"Error occurred during the GET request for {name}: ", e)
 
+        self.downloaded = True
+
     def tabelize(self):
         if not self.downloaded:
             raise APIException("WorldClim is not downloaded!")
@@ -144,6 +146,9 @@ class WorldClimAPI:
         print(f"Tabelization: {'Complete' if self.tabelized else 'Incomplete'}")
 
     def _table_exists(self):
+        if not self.downloaded:
+            return False
+
         query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='WorldClim'"
 
         con = sqlite3.connect(self.sql_path)

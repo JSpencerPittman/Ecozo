@@ -1,6 +1,6 @@
+*.pkl
 .idea
 data
-*.pkl
 *.db
 *.tif
 defaults.yaml
