@@ -26,7 +26,7 @@ RUN set -ex && \
     rm -rf /root/.cache/
 COPY . /code
 
-RUN python setup_proj.py --no-key
+RUN python setup_proj.py --no-key --no-delta --no-worldclim
 
 
 ENV SECRET_KEY "JO0OXEOhnN7AWhvmgi1V16wqKaCX6805ePIXQvPY6Wqh5It9UU"
