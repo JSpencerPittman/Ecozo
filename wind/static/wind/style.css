@@ -147,17 +147,17 @@ body {
 }
 
 .sp-textedit-label {
-    width: 20%;
     text-align: left;
     font-size: 20px;
+    white-space: nowrap;
 }
 
 .sp-textedit {
     height: 65px;
-    width: 80%;
+    width: 100%;
     background-color: #374259;
     box-sizing: border-box;
-    padding: 5;
+    margin-left: 3%;
     
     border: 0;
     outline: none;
