@@ -3,16 +3,14 @@ import yaml
 import requests
 import json
 import pandas as pd
+from datetime import datetime
 from DataManager.APIException import APIException
-
 
 class OpenWeatherAPI:
     def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data')
         self.base_url = "http://api.openweathermap.org/data/2.5/forecast"
-
-        self.calibrated = False
 
         path = os.path.join(self.data_path, 'weather.json')
         self.downloaded = os.path.exists(path)
@@ -24,19 +22,20 @@ class OpenWeatherAPI:
         self.api_key = keys["OPEN_WEATHER_API_KEY"]
 
         self.latitude, self.longitude = None, None
+        self.dt, self.tz = None, None
 
-    def calibrate(self, lat, lon):
+    def download(self, lat, lon):
+        if self.downloaded:
+            if self.latitude == lat and self.longitude == lon:
+                if self.dt is not None and self.dt - (datetime.now().timestamp() + self.tz) > 0:
+                    return
+
         self.latitude = lat
         self.longitude = lon
-        self.calibrated = True
-
-    def download(self):
-        if not self.calibrated:
-            raise APIException("OpenWeatherAPI is not calibrated!")
 
         parameters = [
-            f"lat={self.latitude}",
-            f"lon={self.longitude}",
+            f"lat={lat}",
+            f"lon={lon}",
             f"appid={self.api_key}"
         ]
 
@@ -53,6 +52,9 @@ class OpenWeatherAPI:
                 json.dump(response.json(), weather_json)
 
             self.downloaded = True
+
+            df = self.get_dataframe()
+            self.dt = df.datetime.iloc[0]
 
             print("Weather JSON Data sucessfully downloaded.")
         except requests.exceptions.RequestException as e:
@@ -83,11 +85,9 @@ class OpenWeatherAPI:
         tz = int(weather['city']['timezone'])
         weather_df['datetime'] = weather_df['datetime'] + tz
 
-        return weather_df
+        self.tz = tz
 
-    def status(self):
-        print(f"Calibration: {'Complete' if self.calibrated else 'Incomplete'}")
-        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
+        return weather_df
 
     @staticmethod
     def _format_weather_entry(entry):

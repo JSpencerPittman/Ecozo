@@ -1,10 +1,13 @@
 import os
+
+import psycopg2
 import yaml
 import requests
-import sqlite3
 import numpy as np
 import pandas as pd
 import json
+from sqlalchemy import create_engine, text
+from datetime import datetime
 from DataManager.APIException import APIException
 
 
@@ -12,14 +15,10 @@ class PSM3API:
     def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data')
-        self.sql_path = os.path.join(self.data_path, 'data.db')
         self.base_url = "https://developer.nrel.gov/api/nsrdb/v2/solar/psm3-download.csv"
-        self.calibrated = False
 
         path = os.path.join(self.data_path, 'psm3_data.csv')
         self.downloaded = os.path.exists(path)
-
-        self.tabelized = self._table_exists()
 
         # Get the API key & Email
         keys_path = os.path.join(self.par_dir, 'keys.yaml')
@@ -30,15 +29,27 @@ class PSM3API:
 
         self.latitude, self.longitude, self.year = None, None, None
 
-    def calibrate(self, lat, lon, year):
-        self.latitude = lat
-        self.longitude = lon
-        self.year = year
-        self.calibrated = True
+        self.postgres_url = keys["POSTGRES_URL"]
+        self.tabelized = self._table_exists()
 
-    def download(self):
-        if not self.calibrated:
-            raise APIException("PSM3 is not calibrated!")
+    def establish_connnection(self, engine=False):
+        if engine:
+            engine = create_engine(self.postgres_url)
+            try:
+                cnx = engine.connect()
+                return cnx
+            except Exception as e:
+                print("Failed to connect to Ecozo database: ", e)
+        else:
+            try:
+                cnx = psycopg2.connect(self.postgres_url)
+                return cnx
+            except Exception as e:
+                print("Failed to connect to Ecozo database: ", e)
+
+    def download(self, lat, lon, year):
+        self.latitude, self.longitude = lat, lon
+        self.year = year
 
         parameters = [
             f"wkt=POINT({self.longitude}%20{self.latitude})",
@@ -90,20 +101,19 @@ class PSM3API:
         psm3_data = pd.concat([psm3_data, days_of_year], axis=1)
         psm3_data.rename(columns={0: 'day_of_year'}, inplace=True)
 
-        # Save the data in sql
-        con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
+        # Save the data in postgresql
+        cnx = self.establish_connnection(engine=True)
 
         # Drop the table if it already exists
-        try:
-            cur.execute('DROP TABLE psm3;')
-        except sqlite3.OperationalError:
-            pass
+        if self._table_exists():
+            drop_query = text('DROP TABLE psm3;')
+            cnx.execute(drop_query)
+            cnx.commit()
 
-        psm3_data.to_sql(name='psm3', con=con)
+        psm3_data.to_sql(name='psm3', con=cnx)
+        cnx.commit()
 
-        cur.close()
-        con.close()
+        cnx.close()
 
         # Save the metadata to a JSON file
         meta_json = json.dumps(meta_data, indent=4)
@@ -138,46 +148,49 @@ class PSM3API:
         self._format_psm3_dataframe(res_df)
         return res_df
 
-    def status(self):
-        print(f"Calibration: {'Complete' if self.calibrated else 'Incomplete'}")
-        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
-        print(f"Tabelization: {'Complete' if self.tabelized else 'Incomplete'}")
-
     def _table_exists(self):
-        query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='psm3'"
+        query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
 
-        con = sqlite3.connect(self.sql_path)
-        response = pd.read_sql(query, con)
-        con.close()
+        cnx = self.establish_connnection()
+        cur = cnx.cursor()
 
-        return bool(response.iloc[0, 0])
+        cur.execute(query)
+        tables = cur.fetchall()
+        tables = [t[0] for t in tables]
+
+        cur.close()
+        cnx.close()
+
+        return 'psm3' in tables
 
     def _get_dataframe_for_range(self, doy1, doy2):
         search_query = f"SELECT * FROM psm3 WHERE day_of_year >= {doy1} AND day_of_year <= {doy2}"
+        search_query = text(search_query)
 
-        con = sqlite3.connect(self.sql_path)
-        df = pd.read_sql(search_query, con)
-        con.close()
+        cnx = self.establish_connnection(engine=True)
+
+        df = pd.read_sql(search_query, con=cnx)
+
+        cnx.close()
 
         return df
 
     def _get_dataframe_for_day(self, doy):
         search_query = f"SELECT * FROM psm3 WHERE day_of_year = {doy}"
 
-        con = sqlite3.connect(self.sql_path)
-        df = pd.read_sql(search_query, con)
-        con.close()
+        cnx = self.establish_connnection(engine=True)
+
+        df = pd.read_sql(search_query, con=cnx)
+
+        cnx.close()
 
         return df
 
-    def _date_to_doy(self, month, day):
-        search_query = f"SELECT DISTINCT day_of_year FROM psm3 WHERE Month = {month} AND DAY = {day};"
-
-        con = sqlite3.connect(self.sql_path)
-        res = pd.read_sql(search_query, con)
-        con.close()
-
-        return int(res.iloc[0, 0])
+    @staticmethod
+    def _date_to_doy(month, day):
+        date = datetime(2001, month, day)
+        doy = date.timetuple().tm_yday
+        return doy
 
     def _format_psm3_dataframe(self, df):
         # Convert Temperatures

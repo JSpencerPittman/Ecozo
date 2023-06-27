@@ -4,7 +4,9 @@ import requests
 import sqlite3
 import numpy as np
 import pandas as pd
-import json
+from sqlalchemy import text, create_engine
+import psycopg2
+from datetime import datetime
 from DataManager.APIException import APIException
 
 
@@ -12,14 +14,10 @@ class WindTKAPI:
     def __init__(self):
         self.par_dir = os.path.dirname(__file__)
         self.data_path = os.path.join(self.par_dir, '../data')
-        self.sql_path = os.path.join(self.data_path, 'data.db')
         self.base_url = "https://developer.nrel.gov/api/wind-toolkit/v2/wind/wtk-download.csv"
-        self.calibrated = False
 
         path = os.path.join(self.data_path, 'windtk_data.csv')
         self.downloaded = os.path.exists(path)
-
-        self.tabelized = self._table_exists()
 
         # Get the API key & Email
         keys_path = os.path.join(self.par_dir, 'keys.yaml')
@@ -32,15 +30,12 @@ class WindTKAPI:
         self.longitude = None
         self.year = None
 
-    def calibrate(self, lat, lon, year):
-        self.latitude = lat
-        self.longitude = lon
-        self.year = year
-        self.calibrated = True
+        self.postgres_url = keys["POSTGRES_URL"]
+        self.tabelized = self._table_exists()
 
-    def download(self):
-        if not self.calibrated:
-            raise APIException("WindTK is not calibrated!")
+    def download(self, lat, lon, year):
+        self.latitude, self.longitude = lat, lon
+        self.year = year
 
         parameters = [
             f"wkt=POINT({self.longitude}%20{self.latitude})",
@@ -85,18 +80,19 @@ class WindTKAPI:
         dep_cols = [col for col in windtk_data.columns if ('DEPRECATED' in col)]
         windtk_data.drop(dep_cols, axis=1, inplace=True)
 
-        # Save the data in sql
-        con = sqlite3.connect(self.sql_path)
-        cur = con.cursor()
+        # Save the data in postgresql
+        cnx = self.establish_connnection(engine=True)
 
         # Drop the table if it already exists
         if self._table_exists():
-            cur.execute('DROP TABLE windtk;')
+            drop_query = text('DROP TABLE windtk;')
+            cnx.execute(drop_query)
+            cnx.commit()
 
-        windtk_data.to_sql(name='windtk', con=con)
+        windtk_data.to_sql(name='windtk', con=cnx)
+        cnx.commit()
 
-        cur.close()
-        con.close()
+        cnx.close()
 
         self.tabelized = True
 
@@ -125,46 +121,63 @@ class WindTKAPI:
         self._format_windtk_dataframe(res_df)
         return res_df
 
-    def status(self):
-        print(f"Calibration: {'Complete' if self.calibrated else 'Incomplete'}")
-        print(f"Download: {'Complete' if self.downloaded else 'Incomplete'}")
-        print(f"Tabelization: {'Complete' if self.tabelized else 'Incomplete'}")
+    def establish_connnection(self, engine=False):
+        if engine:
+            engine = create_engine(self.postgres_url)
+            try:
+                cnx = engine.connect()
+                return cnx
+            except Exception as e:
+                print("Failed to connect to Ecozo database: ", e)
+        else:
+            try:
+                cnx = psycopg2.connect(self.postgres_url)
+                return cnx
+            except Exception as e:
+                print("Failed to connect to Ecozo database: ", e)
 
     def _table_exists(self):
-        query = "SELECT Count(name) FROM sqlite_master WHERE type='table' AND name='windtk'"
+        query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
 
-        con = sqlite3.connect(self.sql_path)
-        response = pd.read_sql(query, con)
-        con.close()
+        cnx = self.establish_connnection()
+        cur = cnx.cursor()
 
-        return bool(response.iloc[0, 0])
+        cur.execute(query)
+        tables = cur.fetchall()
+        tables = [t[0] for t in tables]
+
+        cur.close()
+        cnx.close()
+
+        return 'windtk' in tables
 
     def _get_dataframe_for_range(self, doy1, doy2):
         search_query = f"SELECT * FROM windtk WHERE day_of_year >= {doy1} AND day_of_year <= {doy2}"
+        search_query = text(search_query)
 
-        con = sqlite3.connect(self.sql_path)
-        df = pd.read_sql(search_query, con)
-        con.close()
+        cnx = self.establish_connnection(engine=True)
+
+        df = pd.read_sql(search_query, con=cnx)
+
+        cnx.close()
 
         return df
 
     def _get_dataframe_for_day(self, doy):
         search_query = f"SELECT * FROM windtk WHERE day_of_year = {doy}"
 
-        con = sqlite3.connect(self.sql_path)
-        df = pd.read_sql(search_query, con)
-        con.close()
+        cnx = self.establish_connnection(engine=True)
+
+        df = pd.read_sql(search_query, con=cnx)
+
+        cnx.close()
 
         return df
 
     def _date_to_doy(self, month, day):
-        search_query = f"SELECT DISTINCT day_of_year FROM windtk WHERE Month = {month} AND DAY = {day};"
-
-        con = sqlite3.connect(self.sql_path)
-        res = pd.read_sql(search_query, con)
-        con.close()
-
-        return int(res.iloc[0, 0])
+        date = datetime(2001, month, day)
+        doy = date.timetuple().tm_yday
+        return doy
 
     def _format_windtk_dataframe(self, df):
         df.columns = [self._simplify_col_name(col) for col in df.columns]
