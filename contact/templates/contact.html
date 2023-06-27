@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../static/contact/style.css" type="text/css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'contact/style.css' %}" type="text/css">
     </head>
     <body>
         <div class="body-container">
 
             <div class="panel" id="linkedin-bttn">
                 <button class="panel-interior">
-                    <img src="../static/contact/linkedin.png">
+                    {% load static %}
+                    <img src="{% static 'contact/linkedin.png' %}">
                     <p>Linkedin</p>
                 </button>
             </div>
 
             <div class="panel" id="portfolio-bttn">
                 <button class="panel-interior">
-                    <img src="../static/contact/portfolio.png">
+                    {% load static %}
+                    <img src="{% static 'contact/portfolio.png' %}">
                     <p>Portfolio</p>
                 </button>
             </div>
 
             <div class="panel" id="github-bttn">
                 <button class="panel-interior">
-                    <img src="../static/contact/github.png">
+                    {% load static %}
+                    <img src="{% static 'contact/github.png' %}">
                     <p>Github</p>
                 </button>
             </div>
@@ -32,6 +36,7 @@
             </div>
         </div>
 
-    <script src="../static/contact/script.js" type="text/javascript"></script>
+        {% load static %}
+        <script src="{% static 'contact/script.js' %}" type="text/javascript"></script>
     </body>
 </html>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../static/insights/style.css">
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'insights/style.css' %}">
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.1/dist/gsap.min.js"></script>
     </head>
     <body>
@@ -110,6 +111,7 @@
 
         </div> 
 
-        <script src="../static/insights/script.js"></script>
+        {% load static %}
+        <script src="{% static 'insights/script.js' %}" type="text/javascript"></script>
     </body>
 </html>
