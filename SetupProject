@@ -1,5 +1,0 @@
-#!/bin/bash
-pip install -r requirements.txt
-python setup_proj.py
-python manage.py migrate
-

@@ -1,9 +1,10 @@
-FROM heroku/heroku:22
+FROM ubuntu
 
 RUN apt update -y
 RUN apt upgrade -y
 
 RUN apt install python3 libexpat1 -y
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -25,12 +26,12 @@ RUN set -ex && \
     rm -rf /root/.cache/
 COPY . /code
 
-RUN python setup_proj.py --no-key --no-delta
+RUN python setup_proj.py --no-key
+
 
 ENV SECRET_KEY "JO0OXEOhnN7AWhvmgi1V16wqKaCX6805ePIXQvPY6Wqh5It9UU"
-RUN python manage.py collectstatic --noinput
 RUN python manage.py migrate
 
-EXPOSE 8000
+EXPOSE $PORT
 
 CMD gunicorn REW.wsgi:application --bind 0.0.0.0:$PORT
