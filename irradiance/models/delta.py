@@ -153,9 +153,7 @@ class Delta(SolarIrradModel):
             lat, lon = coords['latitude'], coords['longitude']
 
             # Prepare the data for the given location
-            self.psm3_api.calibrate(lat, lon, DEFAULT_YEAR)
-
-            self.psm3_api.download()
+            self.psm3_api.download(lat, lon, DEFAULT_YEAR)
             self.psm3_api.tabelize()
 
             # Request the data at said location for the span of a year

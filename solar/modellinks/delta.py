@@ -16,8 +16,7 @@ def delta_link(request):
 
     ow_api = OpenWeatherAPI()
 
-    ow_api.calibrate(latitude, longitude)
-    ow_api.download()
+    ow_api.download(latitude, longitude)
     ow_df = ow_api.get_dataframe()
 
     delta_model = Delta(solar_panel)
