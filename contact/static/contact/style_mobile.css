@@ -1,0 +1,89 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap'); /*USAGE: font-family: 'Julius Sans One', sans-serif;*/
+
+body {
+    /* Remove Outermost Padding*/
+    margin: 0;
+    padding: 0;
+
+    /* Webpage font */
+    font-family: 'Julius Sans One', sans-serif;
+    color: black;
+
+    display: flex;
+}
+
+button {
+    font-family: 'Julius Sans One', sans-serif;
+    border: 0;
+    color: black;
+}
+
+.body-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+#link-panels-cont {
+    width: 85%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background-color: #4e726e;
+}
+
+/* Panels */
+
+.panel {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel:last-of-type {
+    height: 34%;
+}
+
+.panel-interior {
+    width: 85%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    box-sizing: border-box;
+    padding-left: 10%;
+    padding-right: 10%;
+    background-color: #4e726e;
+}
+
+.panel-interior > img {
+    width: 35%;
+}
+
+.panel-interior > p {
+    width: 65%;
+    font-size: 4vw;
+}
+
+/* Back button */
+
+#back-button {
+    background-color: #545B77;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border: 5px #545B77 solid;
+}
+
+#back-button > button {
+    font-size: 6vw;
+    transform: rotate(90deg);
+    background-color: #545B77;
+}

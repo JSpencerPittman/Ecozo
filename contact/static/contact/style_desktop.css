@@ -11,6 +11,7 @@ body {
     color: black;
 
     display: flex;
+    background-color: red;
 }
 
 button {
@@ -24,15 +25,26 @@ button {
     display: flex;
 }
 
+#link-panels-cont {
+    width: 96%;
+    height: 100%;
+    display: flex;
+    padding: 0;
+}
+
 /* Panels */
 
 .panel {
     height: 100%;
-    width: 32%;
+    width: 33%;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #5C8984;
+}
+
+.panel:last-of-type {
+    width: 34%;
 }
 
 .panel-interior {
@@ -52,7 +64,7 @@ button {
 }
 
 .panel-interior > p {
-    font-size: 70px;
+    font-size: 65px;
 }
 
 /* Back button */
@@ -66,7 +78,7 @@ button {
 }
 
 #back-button > button {
-    font-size: 40px;
+    font-size: 35px;
     writing-mode: vertical-lr;
     background-color: #545B77;
 }
