@@ -1,7 +1,29 @@
+/* --- Monitor Screen size -- */
+
+function active() {
+    var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+    return width >= 1300;
+}
+
+let desktop = active();
+
+window.addEventListener("resize", function(event) {
+    const isActive = active();
+    if(isActive !== desktop) {
+        desktop = isActive;
+        location.reload();
+    }
+});
+
 // Objects from the HTML DOM
 const dsInfoPanel = document.getElementById("datasets-info-panel");
 const mdInfoPanel = document.getElementById("models-info-panel");
-const backButton = document.getElementById('back-button').querySelector('button');
+const backButtonFull = document.getElementById('back-button-full').querySelector('button');
+const backButtonHalf = document.getElementById('back-button-half').querySelector('button');
+const utilityButton = document.getElementById('util-button').querySelector('button');
+
 
 // ID's for the different panels
 const dsIntId = '#datasets-intro-panel';
@@ -12,7 +34,10 @@ const mdIntId = '#models-intro-panel';
 const mdSelId = '#models-select-panel';
 const mdInfId = '#models-info-panel';
 
-const backButtonId = '#back-button';
+const buttonContId = '#button-container';
+const backButtonFullId = '#back-button-full';
+const backButtonHalfId = '#back-button-half';
+const utilButtonId = '#util-button';
 
 // JSON data with links and descriptions
 let data;
@@ -27,13 +52,18 @@ const inactiveColor = '#395754';
 
 // Hides the button temporarily while the animations are taking place
 function toggleBackButton(timeline, t_hide, t_show) {
-    timeline.to(backButtonId, {x:'100%', opacity:'0'}, t_hide);
-    timeline.to(backButtonId, {x:'0', opacity: '100%'}, t_show);
+    timeline.to(buttonContId, {x:'100%', opacity:'0'}, t_hide);
+    timeline.to(buttonContId, {x:'0', opacity: '100%'}, t_show);
 }
 
 /* --- Intro Handling --- */
 
 function introClicked(side) {
+    if(active()) introClickedDesktop(side);
+    else introClickedMobile(side);
+}
+
+function introClickedDesktop(side) {
     let tm = gsap.timeline();
 
     dimInfoPanelHeader(side);
@@ -44,16 +74,46 @@ function introClicked(side) {
     tm.to(mdIntId, {x:'+=110%'}, 0);
     tm.set('.intro-panel', {display:'none'}, 1);
 
+    // Make panels visible
     let selPanel = (side === 'models' ? mdSelId : dsSelId);
     let infPanel = (side === 'models' ? mdInfId : dsInfId);
 
-    // Make panels visible
     tm.set(selPanel, {display:'block'}, 1);
     tm.set(infPanel, {display:'block'}, 1);
 
     // Move into display from a vertical direction
     tm.from(selPanel, {y:'-100%'}, 1);
     tm.from(infPanel, {y:'100%'}, 1);
+
+    tm.play()
+}
+
+function introClickedMobile(side) {
+    let tm = gsap.timeline();
+
+    toggleBackButton(tm, 0, 2);
+
+    // Hide main panels
+    tm.to(dsIntId, {x:'-=100%'}, 0);
+    tm.to(mdIntId, {x:'+=120%'}, 0);
+    tm.set('.intro-panel', {display:'none'}, 1);
+
+    // make selection panel visible
+    let selPanel = (side === 'models' ? mdSelId : dsSelId);
+
+    tm.set(selPanel, {display:'block'}, 1);
+
+    // Add toggle button to button container
+    tm.set(backButtonFullId, {display:'none'}, 1);
+    tm.set(backButtonHalfId, {display:'flex'}, 1);
+    tm.set(utilButtonId, {display:'flex'}, 1);
+
+    // Configure button
+    utilityButton.textContent = (side === 'datasets' ? 'Models' : 'Datasets');
+    utilityButton.onclick = function () {toggleSelectionPanels(side);};
+
+    // Move into display from a vertical direction
+    tm.from(selPanel, {y:'-100%'}, 1);
 
     tm.play()
 }
@@ -154,35 +214,113 @@ function showPanels(tm, side) {
  }
 
  /* --- Menu Selections --- */
+function itemSelectedDesktop(item, side) {
+    let dataset;
+    let header;
+    let content;
+    let contBttn;
 
-function datasetItemSelected(item) {
-    const dataset = data.datasets.find(obj => obj.name === item);
+    if(side === 'datasets') {
+        dataset = data.datasets.find(obj => obj.name === item);
+        header = dsInfoPanel.querySelector('.info-header > p');
+        content = dsInfoPanel.querySelector('.info-content > p');
+        contBttn = dsInfoPanel.querySelector('.info-button > button');
+    } else {
+        dataset = data.models.find(obj => obj.name === item);
+        header = mdInfoPanel.querySelector('.info-header > p');
+        content = mdInfoPanel.querySelector('.info-content > p');
+        contBttn = mdInfoPanel.querySelector('.info-button > button');
+    }
 
-    const header = dsInfoPanel.querySelector('.info-header > p');
-    const content = dsInfoPanel.querySelector('.info-content > p');
-    const contBttn = dsInfoPanel.querySelector('.info-button > button');
-
-    // Update the info display with information about selected dataset
+     // Update the info display with information about selected item
     header.textContent = dataset.name;
     content.textContent = dataset.description;
 
     contBttn.onclick = function () { location.href = dataset.link; }
 }
 
-function modelItemSelected(item) {
-    const dataset = data.models.find(obj => obj.name === item);
+function itemSelectedMobile(item, side) {
+    tm = gsap.timeline();
 
-    const header = mdInfoPanel.querySelector('.info-header > p');
-    const content = mdInfoPanel.querySelector('.info-content > p');
-    const contBttn = mdInfoPanel.querySelector('.info-button > button');
+    toggleBackButton(tm, 0, 1.5);
 
-    // Update the info display with information about selected model
-    header.textContent = dataset.name;
-    content.textContent = dataset.description;
+    // Configure utility button
+    utilityButton.textContent = (side === 'datasets' ? 'Datasets' : 'Models');
+    utilityButton.onclick = function () {goBackToSelection(side);};
 
-    contBttn.onclick = function () { location.href = dataset.link; }
+    // Hide the selection panel
+    const selId = (side === 'datasets' ? dsSelId : mdSelId);
+    tm.to(selId, {x:'+=120%'}, 0);
+    tm.set(selId, {display:'none'}, 0.5);
+    tm.set(selId, {x:'-=120%'}, 0.5);
+
+    // Bring the info panel into view
+    const infId = (side === 'datasets' ? dsInfId : mdInfId);
+    tm.set(infId, {display:'flex'}, 0.5);
+    tm.from(infId, {x:'-=100%'}, 1);
+
+    tm.play();
+
+    itemSelectedDesktop(item, side);
+}
+
+function itemSelected(item, side) {
+    if(active()) itemSelectedDesktop(item, side);
+    else itemSelectedMobile(item, side);
+}
+
+/* --- mobile specific animations --- */
+
+function toggleSelectionPanels(side) {
+    const tm = gsap.timeline();
+
+    toggleBackButton(tm, 0, 1.5);
+
+    // Configure button
+    const utilText = (side === 'datasets' ? 'Datasets' : 'Models');
+    const target = (side === 'datasets' ? 'models' : 'datasets');
+    utilityButton.textContent = utilText;
+    utilityButton.onclick = function () {toggleSelectionPanels(target);};
+
+    // Hide the original panel
+    const hideSelId = (side === 'datasets' ? dsSelId : mdSelId);
+    tm.to(hideSelId, {y:'-=100%'}, 0);
+    tm.set(hideSelId, {display:'none'}, 0.5);
+    tm.set(hideSelId, {y:'+=100%'}, 1);
+
+    // Display the other selection panel
+    const showSelId = (side === 'datasets' ? mdSelId : dsSelId);
+    tm.set(showSelId, {display:'block'}, 0.5);
+    tm.from(showSelId, {y:'+=100%'}, 1);
+
+    tm.play()
+}
+
+function goBackToSelection(side) {
+    const tm = gsap.timeline();
+    toggleBackButton(tm, 0, 1.5);
+
+     // Configure button
+    const utilText = (side === 'datasets' ? 'Models' : 'Datasets');
+    const target = (side === 'datasets' ? 'datasets' : 'models');
+    utilityButton.textContent = utilText;
+    utilityButton.onclick = function () {toggleSelectionPanels(target);};
+
+    // Hide the info panel
+    const infId = (side === 'datasets' ? dsInfId : mdInfId);
+    tm.to(infId, {x:'-=120%'}, 0);
+    tm.set(infId, {display:'none'}, 0.5);
+    tm.set(infId, {x:'+=120%'}, 1);
+
+    // Display the selection panel
+    let selId = (side === 'datasets' ? dsSelId : mdSelId);
+    tm.set(selId, {display:'block'}, 0.5);
+    tm.from(selId, {x:'+=120%'}, 1);
+
+    tm.play()
 }
 
 /* --- Back button Click ---*/
 
-backButton.onclick = function () { location.href = '/'; };
+backButtonFull.onclick = function () { location.href = '/'; };
+backButtonHalf.onclick = function () { location.href = '/'; };

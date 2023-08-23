@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html>
     <head>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'insights/style.css' %}">
+        <link rel="stylesheet" href="{% static 'insights/style_desktop.css' %}" type="text/css" media="(min-width: 1300px)">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'insights/style_mobile.css' %}" type="text/css" media="(max-width: 1299px)">
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.1/dist/gsap.min.js"></script>
     </head>
     <body>
         <div id="body-container">
 
-            <div class="panel intro-panel" id="datasets-intro-panel">
-                <button onclick="introClicked('datasets')">Datasets</button>
-            </div>
-
-            <div class="panel select-panel" id="datasets-select-panel">
-                <div class="panel-header">
-                    <button onclick="panelHeaderClicked('datasets')">Datasets</button>
+            <div id="panels-container">
+                <div class="panel intro-panel" id="datasets-intro-panel">
+                    <button onclick="introClicked('datasets')">Datasets</button>
                 </div>
 
-                <div class="directory">
-                    
-                    <div class="directory-item datasets-item">
-                        <button onclick="datasetItemSelected('openweather')">OpenWeather</button>
-                    </div>
-                    <div class="directory-item datasets-item">
-                        <button onclick="datasetItemSelected('psm3')">PSM3</button>
-                    </div>
-                    <div class="directory-item datasets-item">
-                        <button onclick="datasetItemSelected('worldclim')">WorldClim</button>
-                    </div>
-                    <div class="directory-item datasets-item">
-                        <button onclick="datasetItemSelected('windtk')">WindTK</button>
+                <div class="panel select-panel" id="datasets-select-panel">
+                    <div class="panel-header">
+                        <button onclick="panelHeaderClicked('datasets')">Datasets</button>
                     </div>
 
+                    <div class="directory">
+
+                        <div class="directory-item datasets-item">
+                            <button onclick="itemSelected('openweather', 'datasets')">OpenWeather</button>
+                        </div>
+                        <div class="directory-item datasets-item">
+                            <button onclick="itemSelected('psm3', 'datasets')">PSM3</button>
+                        </div>
+                        <div class="directory-item datasets-item">
+                            <button onclick="itemSelected('worldclim', 'datasets')">WorldClim</button>
+                        </div>
+                        <div class="directory-item datasets-item">
+                            <button onclick="itemSelected('windtk', 'datasets')">WindTK</button>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
                
-            <div class="panel info-panel" id="models-info-panel">
-                <div class="panel-header">
-                    <button onclick="panelHeaderClicked('datasets')">Datasets</button>
+                <div class="panel info-panel" id="models-info-panel">
+                    <div class="panel-header">
+                        <button onclick="panelHeaderClicked('datasets')">Models</button>
+                    </div>
+
+                    <div class="info-header">
+                            <p>Model</p>
+                    </div>
+
+                    <div class="info-content">
+                        <p>
+                            Please select a model
+                        </p>
+                    </div>
+
+                    <div class="info-button-container">
+                        <div class="info-button">
+                            <button>Continue</button>
+                        </div>
+                    </div>
+
+
                 </div>
 
-                <div class="info-header">
-                        <p>Model</p>
-                </div>
-                
-                <div class="info-content">
-                    <p>
-                        Please select a model
-                    </p>
+                <div class="panel intro-panel" id="models-intro-panel">
+                    <button onclick="introClicked('models')">Models</button>
                 </div>
 
-                <div class="info-button-container">
-                    <div class="info-button">
-                        <button>Continue</button>
+                <div class="panel select-panel" id="models-select-panel">
+                    <div class="panel-header">
+                        <button onclick="panelHeaderClicked('models')">Models</button>
+                    </div>
+
+                    <div class="directory">
+
+                        <div class="directory-item models-item">
+                            <button onclick="itemSelected('charlie', 'models')">Charlie</button>
+                        </div>
+                        <div class="directory-item models-item">
+                            <button onclick="itemSelected('delta', 'models')">Delta</button>
+                        </div>
+                        <div class="directory-item models-item">
+                            <button onclick="itemSelected('aeolus', 'models')">Aeolus</button>
+                        </div>
+
                     </div>
                 </div>
 
+                <div class="panel info-panel" id="datasets-info-panel">
+                    <div class="panel-header">
+                        <button onclick="panelHeaderClicked('models')">Datasets</button>
+                    </div>
 
+                    <div class="info-header">
+                        <p>Dataset</p>
+                    </div>
+
+                    <div class="info-content">
+                        <p>Please select a dataset</p>
+                    </div>
+
+                    <div class="info-button-container">
+                        <div class="info-button">
+                            <button>Continue</button>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
 
-            <div class="panel intro-panel" id="models-intro-panel">
-                <button onclick="introClicked('models')">Models</button>
-            </div>
-
-            <div class="panel select-panel" id="models-select-panel">
-                <div class="panel-header">
-                    <button onclick="panelHeaderClicked('models')">Models</button>
+            <div id="button-container">
+                <div id="back-button-full">
+                    <button>Back</button>
                 </div>
-
-                <div class="directory">
-                    
-                    <div class="directory-item models-item">
-                        <button onclick="modelItemSelected('charlie')">Charlie</button>
-                    </div>
-                    <div class="directory-item models-item">
-                        <button onclick="modelItemSelected('delta')">Delta</button>
-                    </div>
-                    <div class="directory-item models-item">
-                        <button onclick="modelItemSelected('aeolus')">Aeolus</button>
-                    </div>
-
+                <div id="back-button-half">
+                    <button>Back</button>
                 </div>
-            </div>
-
-            <div class="panel info-panel" id="datasets-info-panel">
-                <div class="panel-header">
-                    <button onclick="panelHeaderClicked('models')">Models</button>
+                <div id="util-button">
+                    <button>Utility</button>
                 </div>
-
-                <div class="info-header">
-                    <p>Dataset</p>
-                </div>
-                
-                <div class="info-content">
-                    <p>Please select a dataset</p>
-                </div>
-
-                <div class="info-button-container">
-                    <div class="info-button">
-                        <button>Continue</button>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div id="back-button">
-                <button>Back</button>
             </div>
 
         </div> 

@@ -2,7 +2,7 @@
     "datasets": [
         {
             "name": "openweather",
-            "description": "The OpenWeather API offers a comprehensive dataset that enables precise power predictions for the next hour, as well as up to five days, considering the prevailing weather conditions.This functionality facilitates accurate forecasting of power generation from wind turbines or solar panels. By incorporating real-time weather data into the prediction models, users can account for the current weather conditions and make informed decisions regarding power generation. Whether it is optimizing the performance of renewable energy systems or planning energy distribution, the OpenWeather API provides the necessary tools to leverage weather information effectively. With its robust and reliable weather forecasts, this API empowers users to anticipate and adapt to changing weather patterns, ensuring efficient and precise power predictions for various time horizons.",
+            "description": "This API is responsible for providing real time weather data for up to five days in advance in three hour intervals.",
             "link": "https://medium.com/@jspencerpittman/openweather-data-exploration-cedc437a166"
         },
         {

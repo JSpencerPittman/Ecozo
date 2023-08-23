@@ -1,6 +1,11 @@
 /* Font Imports */
 @import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap'); /*USAGE: font-family: 'Julius Sans One', sans-serif;*/
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 body {
     /* Remove Outermost Padding*/
     margin: 0;
@@ -10,10 +15,10 @@ body {
     font-family: 'Julius Sans One', sans-serif;
     color: black;
 
-    display: flex;
-    background-color: #374259;
+    position: relative;
 
-    overflow: hidden;
+    display: flex;
+    /*background-color: #374259;*/
 }
 
 p { margin: 0; }
@@ -21,6 +26,7 @@ p { margin: 0; }
 button {
     font-family: 'Julius Sans One', sans-serif;
     border: none;
+    color: black;
 }
 
 #body-container {
@@ -29,9 +35,16 @@ button {
     display: flex;
 }
 
-.panel {
-    width: 48%;
+#panels-container {
+    width: 85%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel {
+    width: 100%;
+    display: none;
 }
 
 /* Panel Header */
@@ -49,7 +62,6 @@ button {
     background-color: #5C8984;
 }
 
-
 /* Intro panel */
 
 .intro-panel {
@@ -57,16 +69,20 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 50vh;
 }
 
 .intro-panel > button {
-    font-size: 100px;
     background-color: #5C8984;
+    font-size: 10vw;
 }
 
 /* Selection Panel */
 
-.select-panel { display: none; }
+.select-panel {
+    display: none;
+    height: 100vh;
+}
 
 .directory {
     height: 85%;
@@ -105,6 +121,8 @@ button {
 .info-panel {
     background-color: #F2D8D8;
     display: none;
+    height: 100vh;
+    flex-direction: column;
 }
 
 .info-header {
@@ -125,11 +143,11 @@ button {
 }
 
 .info-content {
-    height: 55%;
+    height: 50%;
     display: flex;
     box-sizing: border-box;
     justify-content: center;
-    padding: 0% 10% 5% 10%;
+    padding: 0% 10% 0% 10%;
 }
 
 .info-content > p {
@@ -137,12 +155,13 @@ button {
     background-color: #5C8984;
     color: white;
     height: 100%;
+    box-sizing: border-box;
     padding: 30px;
     width: 100%;
 }
 
 .info-button-container {
-    height: 20%;
+    height: 25%;
     display: flex;
     justify-content: right;
     align-items: center;
@@ -154,26 +173,48 @@ button {
     margin: 10%;
 }
 
-.info-button > button { 
-    font-size: 40px;
+.info-button > button {
+    font-size: 6vw;
     color: white;
     background-color: #5C8984;
 }
 
 /* Back Button */
 
-#back-button {
-    width: 4%;
+#button-container {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/*Opening*/
+#back-button-full {
+    width: 100%;
     height: 100%;
     background-color: #545B77;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
+    box-sizing: border-box;
+    border: 5px #545B77 solid;
 }
 
-#back-button > button {
-    writing-mode: vertical-rl;
-    font-size: 40px;
+#back-button-half, #util-button {
+    width: 100%;
+    height: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #545B77;
+}
+
+#back-button-full > button,
+#back-button-half > button,
+#util-button > button {
+    font-size: 6vw;
+    transform: rotate(90deg);
+    color: black;
     background-color: #545B77;
 }
