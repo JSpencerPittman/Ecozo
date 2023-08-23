@@ -1,6 +1,25 @@
 // Register the plugins
 gsap.registerPlugin(CSSPlugin, TextPlugin);
 
+/* --- Monitor Screen size -- */
+
+function active() {
+    var width = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+    return width >= 1300;
+}
+
+let desktop = active();
+
+window.addEventListener("resize", function(event) {
+    const isActive = active();
+    if(isActive !== desktop) {
+        desktop = isActive;
+        location.reload();
+    }
+});
+
 /* --- Load elements from the HTML DOM --- */
 
 const body = document.getElementsByTagName("body");
@@ -164,14 +183,16 @@ function adjustText(tm, r, c) {
 }
 
 function entering(r, c) {
-    const tm = gsap.timeline();
+    if(active()) {
+        const tm = gsap.timeline();
 
-    adjustRows(tm, r);
-    adjustPanels(tm, r, c);
-    adjustInteriors(tm, r, c);
-    adjustText(tm, r,c);
+        adjustRows(tm, r);
+        adjustPanels(tm, r, c);
+        adjustInteriors(tm, r, c);
+        adjustText(tm, r, c);
 
-    tm.play();
+        tm.play();
+    }
 }
 
 /* --- Event listeners --- */
