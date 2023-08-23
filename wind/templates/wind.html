@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'wind/style.css' %}">
+        <link rel="stylesheet" href="{% static 'wind/style_desktop.css' %}" type="text/css" media="(min-width: 901px)">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'wind/style_mobile.css' %}" type="text/css" media="(max-width: 900px)">
     </head>
     <body>
         {% csrf_token %}
@@ -14,7 +17,7 @@
                     <p>Ecozo</p>
                 </div>
                 <div id="hd-title">
-                    <p>Wind Turbine Generation</p>
+                    <p>Wind Power</p>
                 </div>
                 <button class="button" id="hd-button">Back</button>
             </div>
@@ -23,19 +26,24 @@
 
         <!-- Location Panel -->
         <div class="body-panel" id="lc-panel">
-            <div class="center-content left-cont" id="lc-left-cont">
-                <button onclick="getLocation()" class="button body-button" id="lc-button">Get Location</button>
-            </div>
-            <div class="right-cont" id="lc-right-cont">
-                <div class="lc-content vert-spread" id="lc-labels">
-                    <p>Coordinates</p>
-                    <p>City</p>
-                    <p>Country</p>
+            <div class="panel-content">
+                <div class="center-content left-cont" id="lc-left-cont">
+                    <button onclick="submitPosition()" class="button body-button" id="lc-button">Get Location</button>
                 </div>
-                <div class="lc-content vert-spread" id="lc-values">
-                    <p>({{ location.latitude }}, {{ location.longitude }})</p>
-                    <p>{{ location.city }}</p>
-                    <p>{{ location.country }}</p>
+                <div class="right-cont" id="lc-right-cont">
+                    <div class="center-content" id="lc-status">
+                        <p>Enter city and state</p>
+                    </div>
+                    <div class="location-entry">
+                        <input type="text" class="lc-textedit" id="city-input" placeholder="City" value="{{ location.city }}">
+                        <input type="text" class="lc-textedit" id="state-input"  placeholder="State" value="{{ location.state }}">
+                        <input type="text" class="lc-textedit" id="zipcode-input"  placeholder="Zip" value="{{ location.zipcode }}">
+                    </div>
+                    <p id="loc-or-text">Or</p>
+                    <div class="location-entry">
+                         <input type="text" class="lc-textedit" id="lat-input" placeholder="Latitude" value="{{ location.latitude }}">
+                         <input type="text" class="lc-textedit" id="lon-input" placeholder="Longitude" value="{{ location.longitude }}">
+                    </div>
                 </div>
             </div>
             <div class="panel-label" id="lc-label">
@@ -44,6 +52,7 @@
         </div>
         
         <div class="body-panel" id="sp-panel">
+            <div class="panel-content">
                 <div class="center-content left-cont" id="sp-left-cont">
                     <button class="button body-button" id="sp-button" onclick="submitWindTurbine()">How much power?</button>
                 </div>
@@ -63,13 +72,14 @@
                         </div>
                     </div>
                 </div>
+            </div>
             <div class="panel-label" id="sp-label">
                 <p class="panel-label-text">Wind Turbine</p>
             </div>
         </div>
         
         <div class="body-panel" id="pw-panel">
-            <div id="pw-main-cont">
+            <div class="panel-content" id="pw-main-cont">
                 <div class="horiz-spread" id="pw-results">
                     <div class="vert-spread pw-res-item">
                         <p class="pw-res-item-text">Hour</p>

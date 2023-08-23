@@ -1,22 +1,26 @@
+const cityInput = document.getElementById('city-input');
+const stateInput = document.getElementById('state-input');
+const zipInput = document.getElementById('zipcode-input');
+const latInput = document.getElementById('lat-input');
+const lonInput = document.getElementById('lon-input');
+
+const effInput = document.getElementById("efficiency-input");
+const radInput = document.getElementById("radius-input");
+const heightInput = document.getElementById("height-input");
+
 const backBttn = document.getElementById("hd-button");
 backBttn.onclick = function () { location.href = '/' }
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(submitPosition);
-    } else {
-        console.log("Geolocation is not supported by this browser.");
-    }
-}
-
-function submitPosition(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    let data = {
-        latitude: latitude,
-        longitude: longitude
+function submitPosition() {
+    const position = {
+        city: cityInput.value,
+        state: stateInput.value,
+        zipcode: zipInput.value,
+        latitude: latInput.value,
+        longitude: lonInput.value
     };
-    let jsonData = JSON.stringify(data);
+
+    let jsonPosition = JSON.stringify(position);
 
     const url = "/wind/geo"
     fetch(url, {
@@ -24,7 +28,7 @@ function submitPosition(position) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: jsonData
+        body: jsonPosition
     }).then(response => {
         if(response.ok) {
             window.location.reload();
@@ -33,14 +37,10 @@ function submitPosition(position) {
 }
 
 function submitWindTurbine() {
-    const efficiency = document.getElementById("efficiency-input").value;
-    const radius = document.getElementById("radius-input").value;
-    const height = document.getElementById("height-input").value;
-
     const data = {
-        efficiency: efficiency,
-        radius: radius,
-        height: height
+        efficiency: effInput.value,
+        radius: radInput.value,
+        height: heightInput.value
     };
 
     const jsonData = JSON.stringify(data);

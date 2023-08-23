@@ -14,8 +14,17 @@ body {
 /* General Page Classes */
 
 .body-panel {
-    height: 320px;
+    height: 70vh;
     display: flex;
+    flex-direction: column;
+}
+
+.panel-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    order: 2;
 }
 
 .center-content {
@@ -42,22 +51,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 5%;
-    height: 100%;
-}
-
-.panel-label-text {
-    writing-mode: vertical-lr;
+    width: 100%;
+    height: 15%;
 }
 
 .left-cont {
-    width: 40%;
-    height: 100%;
+    width: 100%;
+    height: 40%;
+    order: 2;
 }
 
 .right-cont {
-    width: 55%;
-    height: 100%;
+    width: 100%;
+    height: 60%;
     display: flex;
     box-sizing: border-box;
     padding: 0% 3%;
@@ -71,7 +77,7 @@ body {
 .body-button {
     height: 150px;
     width: 75%;
-    font-size: 24px;
+    font-size: 5vw;
 }
 
 
@@ -83,9 +89,11 @@ body {
 }
 
 #hd-cont {
-    margin: 0% 3%; 
+    margin: 0%3%;
     height: 100%;
     font-size: 32px;
+    display: flex;
+    justify-content: space-between;
 }
 
 #hd-button {
@@ -97,18 +105,93 @@ body {
     color: white;
 }
 
+#hd-brand { display: none; }
+
 /* Location Specific Styling */
 
-#lc-panel { background-color: #F2D8D8; }
+#lc-left-cont {
+    height: 35%;
+}
 
-#lc-button { 
+#lc-right-cont {
+    display: flex;
+    flex-direction: column;
+    height: 65%;
+}
+
+#lc-panel {
+    background-color: #F2D8D8;
+    height: 90vh;
+}
+
+#lc-button {
     background: #545B77;
     color: white;
 }
 
-.lc-content {
+.location-entry {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.location-entry:first-child {
+    height: 60%;
+}
+
+.location-entry:last-child {
+    height: 40%;
+}
+
+.lc-textedit {
+    background-color: #F2D8D8;
+    border: none;
+    outline: none;
+    color: black;
+    border-bottom: 2px solid black;
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 24px;
+    box-sizing: border-box;
+    width: 60%;
+}
+
+.lc-textedit::placeholder {
+    color: black;
+}
+
+#loc-or-text {
+    text-align: center;
     color: black;
     font-size: 24px;
+    margin: 0;
+    height: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lc-textedit-cont {
+    height: 32%;
+}
+
+.lc-textedit-cont:last-child {
+    margin-bottom: 2%;
+}
+
+#lc-status {
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    margin-top: 2%;
+    height: 25%;
+}
+
+
+.lc-content {
+    color: black;
+    font-size: 4vw;
     text-align: center;
     box-sizing: border-box;
     padding: 5% 0;
@@ -122,14 +205,24 @@ body {
 
 /* Solar Panel Specific Styling */
 
+
 #sp-panel {
     background-color: #545B77;
-    height: 360px;
+    height: 75vh;
+}
+
+#sp-left-cont {
+    height: 50%;
+}
+
+#sp-right-cont {
+    height: 50%;
 }
 
 #sp-button {
     background: #5C8984;
     color: black;
+    margin-bottom: 10%;
 }
 
 #sp-form {
@@ -139,11 +232,11 @@ body {
 
 .sp-textedit-cont {
     width: 100%;
-    height: 65px;
+    height: 20%;
     background-color: #374259;
     max-width: 100%;
     box-sizing: border-box;
-    padding: 0% 5%; 
+    padding: 0% 5%;
 }
 
 .sp-textedit-label {
@@ -153,15 +246,15 @@ body {
 }
 
 .sp-textedit {
-    height: 65px;
+    height: 100%;
     width: 100%;
     background-color: #374259;
     box-sizing: border-box;
     margin-left: 3%;
-    
+
     border: 0;
     outline: none;
-    
+
     font-family: 'Julius Sans One', sans-serif;
     font-size: 20px;
     color: white;
@@ -174,18 +267,28 @@ body {
 
 /* Power Specific Styling */
 
-#pw-panel { background-color: #374259; }
+#pw-panel {
+    background-color: #374259;
+}
 
-#pw-main-cont { width: 95%; }
+#pw-main-cont {
+    padding: 5% 0 0 0;
+    box-sizing: border-box;
+}
 
-#pw-results {     
-    height: 80%;
-    justify-content: space-evenly;
+.horiz-spread {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pw-res-item {
+    flex-basis: 50%;
 }
 
 .pw-res-item-text {
     text-align: center;
-    font-size: 24px;
+    font-size: 2.5vh;
 }
 
 #pw-units {
@@ -207,5 +310,5 @@ body {
 
 #footer-text {
     margin: 0;
-    font-size: 32px;
+    font-size: 4vw;
 }

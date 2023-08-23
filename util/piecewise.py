@@ -25,6 +25,9 @@ class Piecewise(object):
         left_idx = bisect_left(self.x, x)
         right_idx = bisect_right(self.x, x)
 
+        if left_idx == len(self.x) or right_idx == len(self.x):
+            return self.y[-1]
+
         if self.x[left_idx] > x:
             left_idx -= 1
 

@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from wind.modellinks.aeolus import aeolus_link
+from wind.modellinks.boreas import boreas_link
 from geopy.geocoders import Nominatim
+from util.geolocate import geocode
 import json
 
 
@@ -15,13 +17,7 @@ def wind(request):
 
     if loc_in_session:
         context['location'] = request.session['location']
-    else:
-        context['location'] = {
-            'latitude': '---',
-            'longitude': '---',
-            'city': '---',
-            'country': '---'
-        }
+        print(request.session['location'])
 
     if wt_in_session:
         context['wind_turbine'] = request.session['wind_turbine']
@@ -29,8 +25,17 @@ def wind(request):
     if loc_in_session and wt_in_session:
         if not request.session['wind_power_satisfied']:
             aeolus_results = aeolus_link(request)
+            boreas_results = boreas_link(request)
 
-            request.session['wind_power'] = aeolus_results
+            results = dict(
+                hour=boreas_results['hour'],
+                day=boreas_results['day'],
+                five_days=boreas_results['five_days'],
+                month=aeolus_results['month'],
+                year=aeolus_results['year']
+            )
+
+            request.session['wind_power'] = results
             request.session['wind_power_satisfied'] = True
 
         context['wind_power'] = request.session['wind_power']
@@ -55,23 +60,49 @@ def wind_geo(request):
 
     data = json.loads(request.body)
 
-    latitude = data["latitude"]
-    longitude = data["longitude"]
+    coordinates = True
+    address = True
 
-    locator = Nominatim(user_agent="myGeocoder")
-    coordinates = f"{latitude}, {longitude}"
-    location = locator.reverse(coordinates)
+    # Find out what information we do have
+    if data['latitude'] == '' or data['longitude'] == '':
+        coordinates = False
+    if data['city'] == '' or data['state'] == '' or data['zipcode'] == '':
+        address = False
 
-    city = location.raw['address']['city']
-    country = location.raw['address']['country']
+    print(coordinates)
+    print(address)
 
-    data['city'] = city
-    data['country'] = country
+    # Don't have enough information
+    if not coordinates and not address:
+        return redirect('/wind')
+
+    # Resolved the coordinates
+    if not coordinates and address:
+        lat, lon = geocode(data['city'], data['state'], data['zipcode'])
+
+        data['latitude'] = float(lat)
+        data['longitude'] = float(lon)
+    else:
+        lat, lon = data['latitude'], data['longitude']
+
+    # Resolve the address
+    if not address:
+        locator = Nominatim(user_agent="myGeocoder")
+        coordinates = f"{lat}, {lon}"
+        location = locator.reverse(coordinates, timeout=10000)
+
+        city = location.raw['address']['city']
+        state = location.raw['address']['state']
+        zipcode = location.raw['address']['postcode']
+
+        data['city'] = city
+        data['state'] = state
+        data['zipcode'] = zipcode
 
     request.session['location'] = data
+    print(request.session['location'])
 
     return redirect('/wind')
-
 
 @csrf_exempt
 def wind_turbine(request):
