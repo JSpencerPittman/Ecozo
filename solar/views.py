@@ -5,6 +5,7 @@ from solar.modellinks.charlie import charlie_link
 from solar.modellinks.delta import delta_link
 import json
 from geopy.geocoders import Nominatim
+from util.geolocate import geocode
 
 
 @csrf_exempt
@@ -16,13 +17,6 @@ def solar(request):
 
     if loc_in_session:
         context['location'] = request.session['location']
-    else:
-        context['location'] = {
-            'latitude': '---',
-            'longitude': '---',
-            'city': '---',
-            'country': '---'
-        }
 
     if sp_in_session:
         context['solar_panel'] = request.session['solar_panel']
@@ -64,20 +58,44 @@ def solar_geo(request):
 
     data = json.loads(request.body)
 
-    latitude = data["latitude"]
-    longitude = data["longitude"]
+    coordinates = True
+    address = True
 
-    locator = Nominatim(user_agent="myGeocoder")
-    coordinates = f"{latitude}, {longitude}"
-    location = locator.reverse(coordinates, timeout=10000)
+    # Find out what information we do have
+    if data['latitude'] == '' or data['longitude'] == '':
+        coordinates = False
+    if data['city'] == '' or data['state'] == '' or data['zipcode'] == '':
+        address = False
 
-    city = location.raw['address']['city']
-    country = location.raw['address']['country']
+    # Don't have enough information
+    if not coordinates and not address:
+        return redirect('/solar')
 
-    data['city'] = city
-    data['country'] = country
+    # Resolved the coordinates
+    if not coordinates and address:
+        lat, lon = geocode(data['city'], data['state'], data['zipcode'])
+
+        data['latitude'] = float(lat)
+        data['longitude'] = float(lon)
+    else:
+        lat, lon = data['latitude'], data['longitude']
+
+    # Resolve the address
+    if not address:
+        locator = Nominatim(user_agent="myGeocoder")
+        coordinates = f"{lat}, {lon}"
+        location = locator.reverse(coordinates, timeout=10000)
+
+        city = location.raw['address']['city']
+        state = location.raw['address']['state']
+        zipcode = location.raw['address']['postcode']
+
+        data['city'] = city
+        data['state'] = state
+        data['zipcode'] = zipcode
 
     request.session['location'] = data
+    print(request.session['location'])
 
     return redirect('/solar')
 

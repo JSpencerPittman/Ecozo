@@ -13,6 +13,8 @@ def charlie_link(request):
 
     solar_panel = SolarPanel(efficiency, area, pr, capacity)
 
+    print("SOLAR PANEL DATA")
+    print(latitude, longitude, solar_panel)
     charlie_model = Charlie(latitude, longitude, solar_panel)
 
     results = dict(

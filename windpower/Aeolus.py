@@ -19,7 +19,7 @@ class Aeolus(object):
         self.api.download(lat, lon, DEFAULT_YEAR)
         self.api.tabelize()
 
-        data = self.api.get_dataframe(t1=(1,1), t2=(12, 31))
+        data = self.api.get_dataframe(t1=(1, 1), t2=(12, 31))
         self.atm_data = AtmosphericData()
         self.atm_data.add_windtk_data(data)
 

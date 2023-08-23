@@ -1,22 +1,27 @@
+const cityInput = document.getElementById('city-input');
+const stateInput = document.getElementById('state-input');
+const zipInput = document.getElementById('zipcode-input');
+const latInput = document.getElementById('lat-input');
+const lonInput = document.getElementById('lon-input');
+
+const areaInput = document.getElementById('area-input');
+const effInput = document.getElementById('efficiency-input');
+const prInput = document.getElementById('pr-input');
+const capInput = document.getElementById('capacity-input');
+
 const backBttn = document.getElementById("hd-button");
 backBttn.onclick = function () { location.href = '/' }
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(submitPosition);
-    } else {
-        console.log("Geolocation is not supported by this browser.");
-    }
-}
-
-function submitPosition(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    let data = {
-        latitude: latitude,
-        longitude: longitude
+function submitPosition() {
+    const position = {
+        city: cityInput.value,
+        state: stateInput.value,
+        zipcode: zipInput.value,
+        latitude: latInput.value,
+        longitude: lonInput.value
     };
-    let jsonData = JSON.stringify(data);
+
+    let jsonPosition = JSON.stringify(position);
 
     const url = "/solar/geo"
     fetch(url, {
@@ -24,7 +29,7 @@ function submitPosition(position) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: jsonData
+        body: jsonPosition
     }).then(response => {
         if(response.ok) {
             window.location.reload();
@@ -33,19 +38,14 @@ function submitPosition(position) {
 }
 
 function submitSolarPanel() {
-    const area = document.getElementById("area-input").value;
-    const efficiency = document.getElementById("efficiency-input").value;
-    const pr = document.getElementById("pr-input").value;
-    const capacity = document.getElementById("capacity-input").value;
-
-    const data = {
-        area: area,
-        efficiency: efficiency,
-        pr: pr,
-        capacity: capacity
+    const solarPanel = {
+        area: areaInput.value,
+        efficiency: effInput.value,
+        pr: prInput.value,
+        capacity: capInput.value
     };
 
-    const jsonData = JSON.stringify(data);
+    const jsonSP = JSON.stringify(solarPanel);
     const url = "/solar/solar-panel";
 
     fetch(url, {
@@ -53,7 +53,7 @@ function submitSolarPanel() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: jsonData
+        body: jsonSP
     }).then(response => {
         if(response.ok) {
             window.location.reload();

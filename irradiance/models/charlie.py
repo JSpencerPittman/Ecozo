@@ -15,9 +15,9 @@ class Charlie(SolarIrradModel):
         self.solar_panel = sp
         self.api = WorldClimAPI()
 
-        self.wc_df = self.api.get_dataframe(lat, lon)
+        data = self.api.get_dataframe(lat, lon)
 
-        dp = DataPreprocessorCharlie(self.wc_df, lat, lon, self.solar_panel)
+        dp = DataPreprocessorCharlie(data, lat, lon, self.solar_panel)
         self.wc_df = dp.format()
 
     def hour(self):
