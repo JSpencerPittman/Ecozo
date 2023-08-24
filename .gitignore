@@ -12,3 +12,4 @@ webdev
 __pycache__
 *.pyc
 __pycache__/*
+staticfiles/*
