@@ -1,7 +1,6 @@
 from windpower.Boreas import Boreas
 from windpower.WindTurbine import WindTurbine
 
-
 def boreas_link(request):
     latitude = request.session['location']['latitude']
     longitude = request.session['location']['longitude']

@@ -18,6 +18,7 @@ def aeolus_link(request):
 
     aeolus_model = Aeolus(lat=latitude, lon=longitude, turbine=wind_turbine)
 
+
     results = dict(
         hour=aeolus_model.hour(),
         day=aeolus_model.day(),

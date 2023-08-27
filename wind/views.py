@@ -24,7 +24,9 @@ def wind(request):
 
     if loc_in_session and wt_in_session:
         if not request.session['wind_power_satisfied']:
+            print("Calculating Aeolus Results...")
             aeolus_results = aeolus_link(request)
+            print("Calculating Boreas Results...")
             boreas_results = boreas_link(request)
 
             results = dict(
