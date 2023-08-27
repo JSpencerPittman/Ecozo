@@ -16,9 +16,11 @@ class Aeolus(object):
         self.wind_turbine = turbine
 
         self.api = WindTKAPI()
+        print("Aeolus DOWNLOAD...")
         self.api.download(lat, lon, DEFAULT_YEAR)
+        print("Aelous TABELIZE...")
         self.api.tabelize()
-
+        print("Aeolous GET DATAFRAME...")
         data = self.api.get_dataframe(t1=(1, 1), t2=(12, 31))
         self.atm_data = AtmosphericData()
         self.atm_data.add_windtk_data(data)

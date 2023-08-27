@@ -79,6 +79,6 @@ button {
 
 #back-button > button {
     font-size: 35px;
-    writing-mode: vertical-lr;
+    rotate: 90deg;
     background-color: #545B77;
 }

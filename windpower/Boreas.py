@@ -1,12 +1,12 @@
 from windpower.WindTurbine import WindTurbine
 from DataManager.WindTK import WindTKAPI
 from DataManager.OpenWeather import OpenWeatherAPI
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-from scipy.integrate import quad
 import math
 from util.piecewise import Piecewise
+from util.integrate import Integrate
 import numpy as np
 import os
 import pickle
@@ -24,6 +24,7 @@ WIND_ENERGY_EPSABS = 1e10
 DIVISIONS_PER_HOUR = 1
 SECONDS_IN_HOUR = 3600
 WINT_SOL = 355
+
 
 class Boreas(object):
     def __init__(self, wt: WindTurbine = None, lat=None, lon=None):
@@ -104,7 +105,7 @@ class Boreas(object):
         total_energy *= self.wt.efficiency
         total_energy /= 3.6e6
 
-        return total_energy
+        return total_energy[0]
 
     def _estimate_total_wind_energy(self, duration, surf_ws, surf_temp, wint_sol_dist):
         if self.wt is None:
@@ -116,7 +117,11 @@ class Boreas(object):
 
         bottom = self.wt.hub_height - self.wt.blade_radius
         top = self.wt.hub_height + self.wt.blade_radius
-        return quad(g, bottom, top, limit=WIND_ENERGY_DIVISIONS, epsabs=WIND_ENERGY_EPSABS)[0]
+
+        integrate = Integrate(g, bottom, top, 10)
+        return integrate.calc()
+
+        # return quad(g, bottom, top, limit=WIND_ENERGY_DIVISIONS, epsabs=WIND_ENERGY_EPSABS)[0]
 
     def _estimate_wind_layer_energy(self, width, duration, surf_ws, surf_temp, wint_sol_dist, alt):
         wind_speed = self._estimate_wind_speed(surf_ws, surf_temp, wint_sol_dist, alt)
@@ -134,6 +139,7 @@ class Boreas(object):
         return self.ws_reg.predict(input_data)
 
     def _train_ws_regressor(self):
+        print("Training Decision Tree Regressor...")
         # Load the training data
         windtk_df = self.wind_api.get_dataframe(t1=(1, 1), t2=(12, 31))
         windtk_df = self.wind_api.get_dataframe(t1=(1, 1), t2=(12, 31))
@@ -161,7 +167,7 @@ class Boreas(object):
         X = self.ss.fit_transform(X)
 
         # Establish and train this model's regressor
-        self.ws_reg = RandomForestRegressor()
+        self.ws_reg = DecisionTreeRegressor()
         self.ws_reg.fit(X, y)
 
         self.save()
