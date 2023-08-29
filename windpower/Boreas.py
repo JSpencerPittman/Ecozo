@@ -1,7 +1,7 @@
 from windpower.WindTurbine import WindTurbine
 from DataManager.WindTK import WindTKAPI
 from DataManager.OpenWeather import OpenWeatherAPI
-from sklearn.tree import DecisionTreeRegressor
+from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import math
@@ -139,7 +139,7 @@ class Boreas(object):
         return self.ws_reg.predict(input_data)
 
     def _train_ws_regressor(self):
-        print("Training Decision Tree Regressor...")
+        print("Training XGB Regressor...")
         # Load the training data
         windtk_df = self.wind_api.get_dataframe(t1=(1, 1), t2=(12, 31))
         windtk_df = self.wind_api.get_dataframe(t1=(1, 1), t2=(12, 31))
@@ -167,7 +167,7 @@ class Boreas(object):
         X = self.ss.fit_transform(X)
 
         # Establish and train this model's regressor
-        self.ws_reg = DecisionTreeRegressor()
+        self.ws_reg = XGBRegressor()
         self.ws_reg.fit(X, y)
 
         self.save()
